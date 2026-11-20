@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paseo Lomas · Locales en renta</title>
+<meta name="description" content="Locales comerciales disponibles en Paseo Lomas, Lomas de Angelópolis, Puebla.">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --tinta:#1E231D;--gris:#69705F;--linea:#E3E3DA;--fondo:#F6F5F0;--blanco:#fff;
+  --marca:#5C6B57;--marca-osc:#3F4A3B;--marca-suave:#E9EDE4;
+  --libre:#2E9E5B;--libre-s:#DDF3E5;--apart:#D79A1E;--apart-s:#FBEFD3;--rent:#9A9C93;--rent-s:#ECECE7;
+  --sombra:0 10px 30px rgba(30,35,29,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--fondo);color:var(--tinta);font:400 15px/1.5 Inter,system-ui,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+img{display:block;max-width:100%}
+.envoltura{max-width:1240px;margin:0 auto;padding:0 20px}
+
+/* Barra */
+.barra{background:var(--blanco);border-bottom:1px solid var(--linea);position:sticky;top:0;z-index:20}
+.barra .envoltura{display:flex;align-items:center;gap:14px;height:64px}
+.barra img{height:38px;width:auto}
+.barra .nombre{font:600 17px Poppins;letter-spacing:.02em}
+.barra .nombre small{display:block;font:500 11.5px Inter;color:var(--gris);letter-spacing:.04em}
+.barra .esp{flex:1}
+.btn{border:0;border-radius:999px;padding:10px 18px;font-weight:600;background:var(--marca);color:#fff;transition:.15s}
+.btn:hover{background:var(--marca-osc)}
+.btn.sec{background:transparent;color:var(--marca-osc);border:1.5px solid var(--marca)}
+.btn.sec:hover{background:var(--marca-suave)}
+.btn.chico{padding:7px 14px;font-size:13px}
+.aviso{background:#FFF7E3;color:#7A5A12;font-size:12.5px;text-align:center;padding:7px 16px;border-bottom:1px solid #F1E2B8}
+
+/* Portada */
+.portada{position:relative;color:#fff;min-height:360px;display:flex;align-items:flex-end;background:#2b3128 url(img/p7.jpg) center/cover}
+.portada::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,24,19,.1) 0%,rgba(20,24,19,.75) 100%)}
+.portada .envoltura{position:relative;width:100%;padding-top:60px;padding-bottom:34px}
+.eti{font:600 12px Inter;letter-spacing:.16em;text-transform:uppercase;opacity:.9}
+.portada h1{font:700 clamp(30px,5vw,50px)/1.08 Poppins;letter-spacing:-.01em;margin:8px 0 10px;max-width:720px}
+.portada p{max-width:560px;opacity:.92}
+.cifras{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.cifra{background:rgba(255,255,255,.14);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.25);border-radius:14px;padding:10px 16px;min-width:120px}
+.cifra b{display:block;font:700 24px Poppins}
+.cifra span{font-size:12.5px;opacity:.9}
+
+/* Contenido */
+main{padding:28px 0 60px}
+.cab{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+h2{font:600 24px Poppins}
+.sub{color:var(--gris);font-size:14px}
+.filtros{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1.5px solid var(--linea);background:var(--blanco);border-radius:999px;padding:7px 14px;font-size:13.5px;font-weight:600;color:var(--gris);display:inline-flex;align-items:center;gap:7px}
+.chip[aria-pressed=true]{border-color:var(--marca);color:var(--marca-osc);background:var(--marca-suave)}
+.punto{width:9px;height:9px;border-radius:50%;display:inline-block}
+.p-libre{background:var(--libre)}.p-apart{background:var(--apart)}.p-rent{background:var(--rent)}
+
+.mapa{background:var(--blanco);border-radius:18px;box-shadow:var(--sombra);overflow:hidden;position:relative}
+.mapa svg{display:block;width:100%;height:auto}
+.desliza{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.pista{display:none;font-size:12.5px;color:var(--gris);padding:8px 18px 0}
+.zona{cursor:pointer;stroke:#fff;stroke-width:1.2;transition:fill-opacity .15s}
+.zona.libre{fill:var(--libre);fill-opacity:.55}
+.zona.apartado{fill:var(--apart);fill-opacity:.6}
+.zona.rentado{fill:var(--rent);fill-opacity:.45}
+.zona:hover,.zona.activa{fill-opacity:.9;stroke:var(--tinta);stroke-width:2}
+.zona.oculta{fill-opacity:.08;pointer-events:none}
+.etq{font:700 9px Inter;fill:#fff;pointer-events:none;text-anchor:middle;dominant-baseline:central;paint-order:stroke;stroke:rgba(0,0,0,.35);stroke-width:2px}
+.etq.ancla{font-size:12px}
+.leyenda{display:flex;gap:16px;flex-wrap:wrap;padding:12px 18px;border-top:1px solid var(--linea);font-size:13px;color:var(--gris)}
+.leyenda span{display:inline-flex;align-items:center;gap:6px}
+.burbuja{position:absolute;pointer-events:none;background:var(--tinta);color:#fff;font-size:12.5px;border-radius:10px;padding:7px 11px;white-space:nowrap;transform:translate(-50%,-115%);opacity:0;transition:opacity .12s}
+.burbuja b{font-weight:700}
+
+.lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-top:22px}
+.tarjeta{background:var(--blanco);border:1px solid var(--linea);border-radius:16px;padding:16px;text-align:left;display:flex;flex-direction:column;gap:6px;transition:.15s}
+.tarjeta:hover{border-color:var(--marca);box-shadow:var(--sombra);transform:translateY(-2px)}
+.tarjeta .fila{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tarjeta h3{font:600 18px Poppins}
+.tarjeta .tipo{color:var(--gris);font-size:13px}
+.tarjeta .precio{font:700 19px Poppins;margin-top:4px}
+.tarjeta .precio small{font:500 12.5px Inter;color:var(--gris)}
+.estado{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:3px 9px}
+.estado.libre{background:var(--libre-s);color:#1d6b3c}
+.estado.apartado{background:var(--apart-s);color:#8a5f08}
+.estado.rentado{background:var(--rent-s);color:#5f6158}
+.vacio{grid-column:1/-1;text-align:center;color:var(--gris);padding:30px}
+
+/* Panel lateral */
+.velo{position:fixed;inset:0;background:rgba(20,24,19,.45);opacity:0;pointer-events:none;transition:.2s;z-index:40}
+.velo.abierto{opacity:1;pointer-events:auto}
+.panel{position:fixed;top:0;right:0;height:100%;width:min(460px,100%);background:var(--blanco);z-index:50;transform:translateX(100%);transition:transform .25s ease;overflow-y:auto;box-shadow:-10px 0 40px rgba(0,0,0,.15)}
+.panel.abierto{transform:none}
+.panel .foto{height:210px;background:#ccc center/cover;position:relative}
+.cerrar{position:absolute;top:12px;right:12px;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.92);font-size:20px;line-height:1}
+.panel .cuerpo{padding:20px 22px 30px}
+.panel h3{font:700 26px Poppins;margin:6px 0 2px}
+.datos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+.dato{background:var(--fondo);border-radius:12px;padding:10px 12px}
+.dato small{display:block;font-size:11.5px;color:var(--gris);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.dato b{font:600 17px Poppins}
+.giros{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 16px}
+.giros span{background:var(--marca-suave);color:var(--marca-osc);border-radius:999px;padding:4px 10px;font-size:12.5px;font-weight:600}
+.incluye{color:var(--gris);font-size:13.5px;margin-bottom:18px}
+.incluye li{margin-left:18px}
+form{display:grid;gap:10px}
+label{font-size:13px;font-weight:600;display:grid;gap:4px}
+input,select,textarea{border:1.5px solid var(--linea);border-radius:10px;padding:10px 12px;background:#fff;width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--marca)}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ok{background:var(--libre-s);color:#1d6b3c;border-radius:12px;padding:14px;font-weight:600}
+.nota{font-size:12px;color:var(--gris)}
+.bloqueado{background:var(--rent-s);border-radius:12px;padding:14px;color:#55574f;font-size:14px}
+
+/* Administración */
+.admin{display:none;border:2px dashed var(--marca);border-radius:14px;padding:14px;margin-bottom:18px;background:var(--marca-suave)}
+body.es-admin .admin{display:block}
+.admin h4{font:600 14px Poppins;margin-bottom:8px}
+.solicitudes{display:none;margin-top:30px}
+body.es-admin .solicitudes{display:block}
+.tabla{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;font-size:13.5px}
+.tabla th,.tabla td{padding:10px 12px;border-bottom:1px solid var(--linea);text-align:left;vertical-align:top}
+.tabla th{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--gris);background:var(--fondo)}
+.marca-admin{display:none;background:var(--marca-osc);color:#fff;font-size:12px;font-weight:700;border-radius:999px;padding:4px 10px}
+body.es-admin .marca-admin{display:inline-block}
+
+footer{border-top:1px solid var(--linea);padding:24px 0;color:var(--gris);font-size:13px}
+footer .envoltura{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:640px){
+  .barra .nombre small{display:none}
+  .mapa svg{width:900px;max-width:none}
+  .pista{display:block}
+  .etq{font-size:10px}
+  body.es-admin .marca-admin{display:none}
+  .barra .nombre{font-size:15px}
+  .btn.ocultar-cel{display:none}
+  .portada{min-height:300px}
+  .cifra{min-width:0;flex:1}
+  .datos,.dos{grid-template-columns:1fr 1fr}
+  .tabla{display:block;overflow-x:auto}
+}
+</style>
+</head>
+<body>
+<div class="aviso">Versión de demostración: los precios, la disponibilidad y la numeración de los locales son de ejemplo.</div>
+<header class="barra">
+  <div class="envoltura">
+    <img src="img/logo.svg" alt="Paseo Lomas">
+    <div class="nombre">Paseo Lomas<small>Lomas de Angelópolis · Puebla</small></div>
+    <div class="esp"></div>
+    <span class="marca-admin">Administrador</span>
+    <button class="btn sec chico" id="btnAdmin">Administrar</button>
+  </div>
+</header>
+
+<section class="portada">
+  <div class="envoltura">
+    <div class="eti">Locales comerciales en renta</div>
+    <h1>Abre tu negocio en Paseo Lomas</h1>
+    <p>Elige tu local en el plano, revisa medidas y renta, y apártalo en un minuto. Te contactamos el mismo día.</p>
+    <div class="cifras">
+      <div class="cifra"><b id="cLibres">–</b><span>disponibles</span></div>
+      <div class="cifra"><b>45</b><span>locales de 15 m²</span></div>
+      <div class="cifra"><b>6</b><span>tiendas ancla</span></div>
+    </div>
+  </div>
+</section>
+
+<main class="envoltura">
+  <div class="cab">
+    <div>
+      <h2>Plano de la plaza</h2>
+      <p class="sub">Toca un local para ver sus datos y solicitarlo.</p>
+    </div>
+    <div class="filtros" id="filtros">
+      <button class="chip" data-f="todos" aria-pressed="false">Todos</button>
+      <button class="chip" data-f="libre" aria-pressed="true"><span class="punto p-libre"></span>Disponibles</button>
+      <button class="chip" data-f="apartado" aria-pressed="false"><span class="punto p-apart"></span>Apartados</button>
+      <button class="chip" data-f="rentado" aria-pressed="false"><span class="punto p-rent"></span>Rentados</button>
+    </div>
+  </div>
+
+  <div class="mapa" id="mapa">
+    <div class="desliza"><svg id="svg" viewBox="40 230 1380 785" role="img" aria-label="Plano de Paseo Lomas con locales">
+      <image href="img/plano.jpg" x="40" y="230" width="1380" height="785"/>
+      <g id="capa"></g>
+    </svg></div>
+    <div class="pista">Desliza el plano para ver toda la plaza →</div>
+    <div class="burbuja" id="burbuja"></div>
+    <div class="leyenda">
+      <span><i class="punto p-libre"></i>Disponible</span>
+      <span><i class="punto p-apart"></i>Apartado</span>
+      <span><i class="punto p-rent"></i>Rentado</span>
+      <span>Blvd. de los Volcanes 400</span>
+    </div>
+  </div>
+
+  <div class="lista" id="lista"></div>
+
+  <section class="solicitudes">
+    <div class="cab"><div><h2>Solicitudes recibidas</h2><p class="sub">Interesados que pidieron información o apartar un local.</p></div>
+      <button class="btn sec chico" id="btnReiniciar">Reiniciar demo</button></div>
+    <table class="tabla"><thead><tr><th>Fecha</th><th>Local</th><th>Nombre</th><th>Contacto</th><th>Giro</th><th>Mensaje</th></tr></thead><tbody id="tSol"></tbody></table>
+  </section>
+</main>
+
+<footer><div class="envoltura"><span>Paseo Lomas · Blvd. de los Volcanes 400, Lomas de Angelópolis, Puebla</span><span>Precios en pesos mexicanos más IVA</span></div></footer>
+
+<div class="velo" id="velo"></div>
+<aside class="panel" id="panel" aria-hidden="true"></aside>
+
+<script>
+// ---------- Datos de la plaza (coordenadas sobre el plano arquitectónico) ----------
+const GIROS_LOCAL = [
+  ['Cafetería','Barbería','Tienda de regalos'],['Estética','Florería','Óptica'],['Panadería','Heladería','Papelería'],
+  ['Consultorio','Nutrióloga','Estudio de uñas'],['Tintorería','Celulares','Joyería'],['Paletería','Boutique','Agencia de viajes']];
+const FRANJAS = [ // [esquinas: arriba-izq, arriba-der, abajo-der, abajo-izq], cantidad, eje de corte
+  {q:[[257,296],[524,296],[524,361],[257,361]], n:9, zona:'Frente norte'},
+  {q:[[527,291],[787,291],[787,358],[527,358]], n:9, zona:'Frente norte'},
+  {q:[[787,272],[1031,272],[1031,334],[787,334]], n:9, zona:'Frente norte'},
+  {q:[[297,405],[557,652],[512,700],[252,455]], n:12, zona:'Andador poniente'},
+  {q:[[1225,477],[1270,650],[1337,635],[1295,460]], n:6, zona:'Plaza oriente'},
+];
+const mezclar=(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];
+const BASE=[];
+let num=1;
+FRANJAS.forEach(f=>{
+  const [A,B,C,D]=f.q;
+  for(let i=0;i<f.n;i++){
+    const t0=i/f.n,t1=(i+1)/f.n;
+    const pts=[mezclar(A,B,t0),mezclar(A,B,t1),mezclar(D,C,t1),mezclar(D,C,t0)];
+    const esquina=i===0||i===f.n-1;
+    const id='L'+num;
+    BASE.push({id,nombre:'Local '+num,tipo:'local',zona:f.zona,m2:15,pts,
+      renta:0,
+      giros:GIROS_LOCAL[num%GIROS_LOCAL.length],foto:'img/p12.jpg',esquina});
+    num++;
+  }
+});
+const BANDA={P0:[655,540],P1:[1060,900],Q0:[515,665],Q1:[800,985]};
+const ANCLAS_BANDA=[['A1','Ancla · Pizzería',176.80],['A2','Ancla · Laboratorio clínico',175.08],['A3','Ancla · Gimnasio',175.08],['A4','Ancla · Tienda de conveniencia',180.57]];
+ANCLAS_BANDA.forEach(([id,nombre,m2],i)=>{
+  const t0=i/4,t1=(i+1)/4;
+  BASE.push({id,nombre,tipo:'ancla',zona:'Huella ancla',m2,pts:[mezclar(BANDA.P0,BANDA.P1,t0),mezclar(BANDA.P0,BANDA.P1,t1),mezclar(BANDA.Q0,BANDA.Q1,t1),mezclar(BANDA.Q0,BANDA.Q1,t0)],
+    renta:0,giros:['Tienda ancla','Franquicia'],foto:'img/p7.jpg'});
+});
+BASE.push({id:'A5',nombre:'Ancla · Farmacia',tipo:'ancla',zona:'Huella ancla',m2:180.08,pts:[[1190,688],[1338,648],[1380,810],[1230,845]],renta:0,giros:['Farmacia','Tienda ancla'],foto:'img/p12.jpg'});
+BASE.push({id:'A6',nombre:'Fast food con terraza',tipo:'ancla',zona:'Plaza de comida',m2:374.54,pts:[[1065,298],[1200,298],[1255,450],[1105,452]],renta:0,giros:['Restaurante','Cafetería','Comida rápida'],foto:'img/p18.jpg'});
+
+// Estados de ejemplo
+const EJ_APART=['L4','L13','L22','L31','L41','A2'], EJ_RENT=['L1','L2','L6','L10','L11','L19','L20','L27','L28','L35','L45','A1','A3','A4','A5'];
+const estadoInicial=id=>EJ_RENT.includes(id)?'rentado':EJ_APART.includes(id)?'apartado':'libre';
+
+// ---------- Guardado (en la versión real va a la base de datos) ----------
+const CLAVE='paseo-lomas-locales-v1', CLAVE_SOL='paseo-lomas-solicitudes-v1';
+const leer=(k,def)=>{try{return JSON.parse(localStorage.getItem(k))??def}catch(e){return def}};
+const guardar=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+// Para conectar el formulario con el CRM (GoHighLevel, correo, etc.) basta poner aquí la URL del webhook.
+const WEBHOOK='';
+
+let cambios=leer(CLAVE,{});
+let solicitudes=leer(CLAVE_SOL,[]);
+const L=()=>BASE.map(b=>({...b,estado:estadoInicial(b.id),...(cambios[b.id]||{})}));
+let filtro='libre', activo=null;
+const esAdmin=()=>document.body.classList.contains('es-admin');
+const $=s=>document.querySelector(s);
+const pesos=n=>n?'$'+Math.round(n).toLocaleString('es-MX'):'$0000';
+const ETQ={libre:'Disponible',apartado:'Apartado',rentado:'Rentado'};
+const centro=p=>[p.reduce((s,q)=>s+q[0],0)/p.length,p.reduce((s,q)=>s+q[1],0)/p.length];
+
+function pintar(){
+  const datos=L();
+  $('#cLibres').textContent=datos.filter(d=>d.estado==='libre').length;
+  const capa=$('#capa'); capa.innerHTML='';
+  datos.forEach(d=>{
+    const g=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    g.setAttribute('points',d.pts.map(p=>p.join(',')).join(' '));
+    g.setAttribute('class','zona '+d.estado+(filtro!=='todos'&&d.estado!==filtro?' oculta':'')+(activo===d.id?' activa':''));
+    g.setAttribute('tabindex','0'); g.setAttribute('aria-label',d.nombre+', '+ETQ[d.estado]);
+    g.addEventListener('click',()=>abrir(d.id));
+    g.addEventListener('keydown',e=>{if(e.key==='Enter')abrir(d.id)});
+    g.addEventListener('mousemove',e=>burbuja(e,d));
+    g.addEventListener('mouseleave',()=>$('#burbuja').style.opacity=0);
+    capa.appendChild(g);
+    const [cx,cy]=centro(d.pts);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',cx);t.setAttribute('y',cy);t.setAttribute('class','etq'+(d.tipo==='ancla'?' ancla':''));
+    t.textContent=d.tipo==='ancla'?d.id:d.id.slice(1); capa.appendChild(t);
+  });
+  const vis=datos.filter(d=>filtro==='todos'||d.estado===filtro);
+  $('#lista').innerHTML=vis.length?vis.map(d=>`
+    <button class="tarjeta" data-id="${d.id}">
+      <div class="fila"><h3>${d.nombre}</h3><span class="estado ${d.estado}">${ETQ[d.estado]}</span></div>
+      <div class="tipo">${d.m2.toLocaleString('es-MX')} m² · ${d.zona}${d.esquina?' · esquina':''}</div>
+      <div class="precio">${d.estado==='rentado'?'—':pesos(d.renta)} <small>${d.estado==='rentado'?'ocupado':'al mes'}</small></div>
+    </button>`).join(''):'<div class="vacio">No hay locales con ese filtro.</div>';
+  document.querySelectorAll('.tarjeta').forEach(b=>b.onclick=()=>abrir(b.dataset.id));
+  $('#tSol').innerHTML=solicitudes.length?solicitudes.slice().reverse().map(s=>`<tr><td>${s.fecha}</td><td>${s.local}</td><td>${esc(s.nombre)}</td><td>${esc(s.tel)}<br>${esc(s.correo)}</td><td>${esc(s.giro)}</td><td>${esc(s.msg)}</td></tr>`).join(''):'<tr><td colspan="6" class="vacio">Todavía no hay solicitudes. Prueba el formulario de un local disponible.</td></tr>';
+}
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function burbuja(e,d){
+  const r=$('#mapa').getBoundingClientRect(), b=$('#burbuja');
+  b.innerHTML=`<b>${d.nombre}</b> · ${d.m2} m² · ${ETQ[d.estado]}${d.estado!=='rentado'?' · '+pesos(d.renta)+'/mes':''}`;
+  b.style.left=(e.clientX-r.left)+'px'; b.style.top=(e.clientY-r.top)+'px'; b.style.opacity=1;
+}
+
+function abrir(id){
+  activo=id; const d=L().find(x=>x.id===id);
+  const mant=0;
+  $('#panel').innerHTML=`
+    <div class="foto" style="background-image:url(${d.foto})"><button class="cerrar" aria-label="Cerrar" id="cerrar">×</button></div>
+    <div class="cuerpo">
+      <span class="estado ${d.estado}">${ETQ[d.estado]}</span>
+      <h3>${d.nombre}</h3>
+      <div class="sub">${d.zona}${d.esquina?' · local en esquina':''}</div>
+      <div class="admin">
+        <h4>Modo administrador</h4>
+        <div class="dos">
+          <label>Estado<select id="aEstado">${Object.entries(ETQ).map(([k,v])=>`<option value="${k}" ${k===d.estado?'selected':''}>${v}</option>`).join('')}</select></label>
+          <label>Renta mensual<input id="aRenta" type="number" min="0" step="100" value="${d.renta}"></label>
+        </div>
+        <button class="btn chico" id="aGuardar" style="margin-top:10px">Guardar cambios</button>
+      </div>
+      <div class="datos">
+        <div class="dato"><small>Superficie</small><b>${d.m2.toLocaleString('es-MX')} m²</b></div>
+        <div class="dato"><small>Renta mensual</small><b>${pesos(d.renta)}</b></div>
+        <div class="dato"><small>Mantenimiento</small><b>${pesos(mant)}</b></div>
+        <div class="dato"><small>Depósito</small><b>2 meses</b></div>
+      </div>
+      <div class="sub" style="font-weight:600;color:var(--tinta)">Giros sugeridos</div>
+      <div class="giros">${d.giros.map(g=>`<span>${g}</span>`).join('')}</div>
+      <ul class="incluye">
+        <li>Contrato mínimo de 12 meses.</li>
+        <li>Estacionamiento para clientes, baños y vigilancia.</li>
+        <li>Se entrega en obra gris con acometidas de luz y agua.</li>
+      </ul>
+      <div id="zonaForm">${d.estado==='rentado'
+        ?`<div class="bloqueado">Este local ya está rentado. <a href="#" id="verLibres">Ver locales disponibles</a></div>`
+        :`<form id="form">
+            <h4 style="font:600 18px Poppins">${d.estado==='apartado'?'Anótate en lista de espera':'Quiero rentarlo'}</h4>
+            <label>Nombre completo<input name="nombre" required autocomplete="name"></label>
+            <div class="dos">
+              <label>WhatsApp<input name="tel" required type="tel" autocomplete="tel" placeholder="222 123 4567"></label>
+              <label>Correo<input name="correo" type="email" autocomplete="email"></label>
+            </div>
+            <label>Giro de tu negocio<input name="giro" required placeholder="Ej. cafetería"></label>
+            <label>Mensaje (opcional)<textarea name="msg" rows="3" placeholder="¿Cuándo te gustaría abrir?"></textarea></label>
+            <button class="btn" type="submit">${d.estado==='apartado'?'Unirme a la lista':'Solicitar este local'}</button>
+            <p class="nota">Te contactamos por WhatsApp el mismo día hábil.</p>
+          </form>`}</div>
+    </div>`;
+  $('#panel').classList.add('abierto'); $('#panel').setAttribute('aria-hidden','false'); $('#velo').classList.add('abierto');
+  $('#cerrar').onclick=cerrar;
+  const vl=$('#verLibres'); if(vl) vl.onclick=e=>{e.preventDefault();cerrar();ponerFiltro('libre');$('#mapa').scrollIntoView({behavior:'smooth'})};
+  $('#aGuardar').onclick=()=>{
+    cambios[id]={estado:$('#aEstado').value,renta:Math.max(0,+$('#aRenta').value||d.renta)};
+    guardar(CLAVE,cambios); pintar(); abrir(id);
+  };
+  const f=$('#form');
+  if(f) f.onsubmit=e=>{
+    e.preventDefault();
+    const s=Object.fromEntries(new FormData(f)); s.local=d.nombre;
+    s.fecha=new Date().toLocaleString('es-MX',{dateStyle:'short',timeStyle:'short'});
+    solicitudes.push(s); guardar(CLAVE_SOL,solicitudes);
+    if(WEBHOOK) fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(s)}).catch(()=>{});
+    $('#zonaForm').innerHTML=`<div class="ok">¡Listo, ${esc(s.nombre.split(' ')[0])}! Recibimos tu solicitud para el ${d.nombre}. Te escribimos por WhatsApp hoy mismo.</div>`;
+    pintar();
+  };
+  pintar();
+}
+function cerrar(){activo=null;$('#panel').classList.remove('abierto');$('#panel').setAttribute('aria-hidden','true');$('#velo').classList.remove('abierto');pintar()}
+$('#velo').onclick=cerrar;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')cerrar()});
+
+function ponerFiltro(f){filtro=f;document.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.f===f));pintar()}
+document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>ponerFiltro(c.dataset.f));
+
+$('#btnAdmin').onclick=()=>{
+  document.body.classList.toggle('es-admin');
+  $('#btnAdmin').textContent=esAdmin()?'Salir':'Administrar';
+  if(esAdmin()) ponerFiltro('todos');
+};
+$('#btnReiniciar').onclick=()=>{if(confirm('¿Volver los locales y las solicitudes a como estaban al inicio?')){cambios={};solicitudes=[];guardar(CLAVE,cambios);guardar(CLAVE_SOL,solicitudes);pintar()}};
+if(new URLSearchParams(location.search).has('admin')) $('#btnAdmin').click();
+pintar();
+{const h=location.hash.slice(1); if(BASE.some(b=>b.id===h)) abrir(h);}
+</script>
+</body>
+</html>

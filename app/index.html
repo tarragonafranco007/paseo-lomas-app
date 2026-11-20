@@ -1,0 +1,1237 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3F4A3B">
+<title>Paseo Lomas · App</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --tinta:#1E231D;--gris:#69705F;--gris2:#9aa093;--linea:#E3E3DA;--fondo:#F6F5F0;--blanco:#fff;
+  --marca:#5C6B57;--marca-osc:#3F4A3B;--marca-suave:#E9EDE4;--arena:#C9B89A;
+  --libre:#2E9E5B;--libre-s:#DDF3E5;--apart:#D79A1E;--apart-s:#FBEFD3;--rent:#9A9C93;--rent-s:#ECECE7;--rojo:#C0392B;
+  --sombra:0 10px 30px rgba(30,35,29,.10);--r:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{background:var(--fondo);color:var(--tinta);font:400 15px/1.5 Inter,system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.ic{flex:none;display:inline-block;vertical-align:middle}
+h1,h2,h3,h4{font-family:Poppins,sans-serif;line-height:1.2}
+.oculto{display:none!important}
+.sub{color:var(--gris);font-size:13.5px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:10px 18px;font-weight:600;background:var(--marca);color:#fff;transition:.15s;text-decoration:none;white-space:nowrap}
+.btn:hover{background:var(--marca-osc)}
+.btn.sec{background:var(--blanco);color:var(--marca-osc);border:1.5px solid var(--marca)}
+.btn.sec:hover{background:var(--marca-suave)}
+.btn.suave{background:var(--marca-suave);color:var(--marca-osc)}
+.btn.peligro{background:#fbe9e7;color:var(--rojo)}
+.btn.chico{padding:7px 13px;font-size:13px}
+.btn.ancho{width:100%}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.chip{border:1.5px solid var(--linea);background:var(--blanco);border-radius:999px;padding:7px 14px;font-size:13.5px;font-weight:600;color:var(--gris);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.chip.on{border-color:var(--marca);color:var(--marca-osc);background:var(--marca-suave)}
+.estado{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border-radius:999px;padding:3px 9px;white-space:nowrap}
+.estado.libre,.estado.abierto{background:var(--libre-s);color:#1d6b3c}
+.estado.apartado,.estado.prox{background:var(--apart-s);color:#8a5f08}
+.estado.rentado,.estado.cerrado{background:var(--rent-s);color:#5f6158}
+label{font-size:13px;font-weight:600;display:grid;gap:5px}
+input,select,textarea{border:1.5px solid var(--linea);border-radius:11px;padding:10px 12px;background:#fff;width:100%;font-weight:400}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--marca)}
+input[type=checkbox]{width:auto;accent-color:var(--marca);transform:scale(1.2)}
+input[type=color]{padding:3px;height:42px}
+.form{display:grid;gap:12px}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tres{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.tarjeta{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--r);padding:16px}
+.vacio{text-align:center;color:var(--gris);padding:28px 10px;font-size:14px}
+.punto{width:9px;height:9px;border-radius:50%;display:inline-block}
+.aviso-demo{position:relative;z-index:50;background:#FFF7E3;color:#7A5A12;font-size:12px;padding:5px 12px;border-bottom:1px solid #F1E2B8;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.aviso-demo a{font-weight:700;display:inline-flex;gap:5px;align-items:center;background:#7A5A12;color:#fff;border-radius:999px;padding:3px 10px}
+
+/* ---------- Portada (elegir vista) ---------- */
+.inicio{min-height:100vh;display:grid;grid-template-rows:1fr auto;background:#2b3128 url(img/p7.jpg) center/cover;position:relative;color:#fff}
+.inicio::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,24,19,.25),rgba(20,24,19,.85))}
+.inicio>*{position:relative}
+.inicio .cab{display:flex;align-items:center;gap:12px;padding:22px 24px}
+.inicio .cab img{height:44px;filter:brightness(0) invert(1)}
+.inicio .cab b{font:600 20px Poppins}
+.inicio .centro{max-width:1080px;margin:0 auto;padding:0 20px 50px;align-self:end;width:100%}
+.inicio h1{font:800 clamp(32px,5vw,54px)/1.05 Poppins;max-width:720px;margin-bottom:10px}
+.inicio p.lead{max-width:560px;opacity:.92;margin-bottom:26px}
+.roles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.rol{background:rgba(255,255,255,.95);color:var(--tinta);border-radius:20px;padding:20px;text-align:left;display:grid;gap:8px;transition:.15s;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.rol:hover{transform:translateY(-3px)}
+.rol .ico{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--marca-suave);color:var(--marca-osc)}
+.rol h3{font-size:18px}
+.rol p{color:var(--gris);font-size:13.5px}
+.rol span{color:var(--marca);font-weight:700;font-size:13.5px}
+
+/* ---------- App de clientes ---------- */
+.escena-movil{min-height:100vh;background:#d9ded3 url(img/p12.jpg) center/cover fixed}
+.escena-movil::before{content:"";position:fixed;inset:0;background:rgba(233,237,228,.82);backdrop-filter:blur(6px)}
+.movil{position:relative;max-width:440px;margin:0 auto;min-height:100vh;background:var(--fondo);box-shadow:0 0 50px rgba(0,0,0,.18);padding-bottom:84px}
+.c-top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(246,245,240,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--linea)}
+.c-top img{height:30px}
+.c-top b{font:600 16px Poppins;flex:1}
+.ibtn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--blanco);border:1px solid var(--linea);position:relative;color:var(--tinta)}
+.ibtn .badge{position:absolute;top:-3px;right:-3px;min-width:18px;height:18px;border-radius:9px;background:var(--rojo);color:#fff;font:700 10.5px/18px Inter;text-align:center;padding:0 4px}
+.c-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;z-index:30;display:grid;grid-template-columns:repeat(5,1fr);background:#fff;border-top:1px solid var(--linea);padding:6px 4px calc(8px + env(safe-area-inset-bottom))}
+.c-nav a{display:grid;justify-items:center;gap:2px;font-size:11px;font-weight:600;color:var(--gris2);text-decoration:none;padding:4px 0}
+.c-nav a.on{color:var(--marca-osc)}
+.c-nav a.on .ic{stroke-width:2.4}
+.c-sec{padding:16px}
+.c-sec h2.t{font-size:18px;margin:22px 0 10px;display:flex;justify-content:space-between;align-items:center}
+.c-sec h2.t a{font:600 13px Inter;color:var(--marca);text-decoration:none}
+.hero{position:relative;height:200px;padding-bottom:40px!important;background:#333 url(img/p12.jpg) center/cover;color:#fff;display:flex;align-items:flex-end;padding:16px}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,.65))}
+.hero>*{position:relative}
+.hero small{opacity:.9}
+.hero h1{font-size:26px}
+.tpuntos{margin:-26px 16px 0;position:relative;z-index:2;border-radius:20px;padding:16px 18px;color:#fff;background:linear-gradient(135deg,#3F4A3B,#6E8166);box-shadow:var(--sombra);display:grid;gap:8px;cursor:pointer}
+.tpuntos .fila{display:flex;justify-content:space-between;align-items:center}
+.tpuntos b{font:800 34px Poppins;line-height:1}
+.tpuntos .nivel{background:rgba(255,255,255,.18);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700}
+.barra{height:7px;border-radius:9px;background:rgba(255,255,255,.25);overflow:hidden}
+.barra i{display:block;height:100%;background:#F2D27A;border-radius:9px}
+.carrusel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:2px 16px 8px;scrollbar-width:none}
+.carrusel::-webkit-scrollbar{display:none}
+.carrusel>*{scroll-snap-align:start;flex:none}
+.promo{width:250px;border-radius:18px;overflow:hidden;background:#fff;border:1px solid var(--linea);text-align:left;display:block}
+.promo .img{height:110px;display:grid;place-items:center;font-size:46px;background-size:cover;background-position:center}
+.promo .txt{padding:10px 12px}
+.promo b{font:600 14.5px Poppins;display:block}
+.promo small{color:var(--gris);font-size:12.5px}
+.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.cat{background:#fff;border:1px solid var(--linea);border-radius:14px;padding:10px 4px;display:grid;justify-items:center;gap:4px;font-size:11.5px;font-weight:600;color:var(--gris)}
+.cat span{font-size:24px}
+.mini{width:140px;background:#fff;border:1px solid var(--linea);border-radius:16px;padding:12px;display:grid;justify-items:center;gap:6px;text-align:center}
+.mini b{font:600 13.5px Poppins;line-height:1.2}
+.mini small{font-size:11.5px;color:var(--gris)}
+.logo{border-radius:50%;display:grid;place-items:center;color:#fff;font:700 15px Poppins;background-size:cover;background-position:center;flex:none;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.evento{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--linea);border-radius:16px;padding:12px;margin-bottom:10px}
+.evento .fecha{width:52px;height:56px;border-radius:12px;background:var(--marca-suave);color:var(--marca-osc);display:grid;place-items:center;text-align:center;font:700 18px/1 Poppins;flex:none}
+.evento .fecha small{display:block;font:700 10px Inter;text-transform:uppercase;letter-spacing:.06em}
+.evento b{font-weight:600;display:block}
+.banner{margin-top:22px;border-radius:20px;padding:18px;background:var(--tinta) url(img/p7.jpg) center/cover;color:#fff;position:relative;overflow:hidden;cursor:pointer}
+.banner::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(20,24,19,.9),rgba(20,24,19,.35))}
+.banner>*{position:relative}
+.banner h3{font-size:18px;margin-bottom:4px;max-width:240px}
+.banner p{font-size:13px;opacity:.9;max-width:240px;margin-bottom:12px}
+.buscar{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--linea);border-radius:14px;padding:0 12px}
+.buscar input{border:0;padding:11px 0}
+.fchips{display:flex;gap:8px;overflow-x:auto;margin:12px -16px 4px;padding:0 16px 4px;scrollbar-width:none}
+.tienda{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--linea);border-radius:18px;padding:10px;margin-top:10px;width:100%;text-align:left}
+.tienda .th{width:84px;height:84px;border-radius:14px;flex:none;display:grid;place-items:center;font-size:34px;background-size:cover;background-position:center;position:relative}
+.tienda .th .logo{position:absolute;right:-6px;bottom:-6px}
+.tienda .inf{flex:1;min-width:0}
+.tienda b{font:600 15.5px Poppins;display:block}
+.tienda .meta{display:flex;gap:6px;align-items:center;margin-top:6px;flex-wrap:wrap}
+.fav{color:var(--gris2)}
+.fav.on{color:#e0475b}
+.fav.on svg{fill:#e0475b}
+.portada{height:220px;display:grid;place-items:center;font-size:80px;background-size:cover;background-position:center;position:relative}
+.portada .volver{position:absolute;top:12px;left:12px;background:rgba(255,255,255,.92)}
+.portada .fav-b{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.92)}
+.ficha{background:var(--fondo);border-radius:22px 22px 0 0;margin-top:-22px;position:relative;padding:0 16px 16px}
+.ficha .cabf{display:flex;gap:12px;align-items:flex-end;transform:translateY(-26px);margin-bottom:-14px}
+.ficha h1{font-size:23px}
+.acciones4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}
+.acc{background:#fff;border:1px solid var(--linea);border-radius:14px;padding:10px 4px;display:grid;justify-items:center;gap:4px;font-size:11.5px;font-weight:600;color:var(--marca-osc)}
+.tabs{display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid var(--linea);margin:6px -16px 12px;padding:0 16px;scrollbar-width:none}
+.tabs button{padding:10px 10px;font-weight:600;font-size:14px;color:var(--gris);border-bottom:2.5px solid transparent;white-space:nowrap}
+.tabs button.on{color:var(--tinta);border-color:var(--marca)}
+.prod{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--linea)}
+.prod .pi{width:62px;height:62px;border-radius:12px;flex:none;display:grid;place-items:center;font-size:26px;background-size:cover;background-position:center}
+.prod .pn{flex:1;min-width:0}
+.prod b{font-weight:600}
+.prod small{display:block;color:var(--gris);font-size:12.5px}
+.prod .pp{font:700 15px Poppins;white-space:nowrap}
+.gcat{font:700 12px Inter;letter-spacing:.08em;text-transform:uppercase;color:var(--gris);margin:16px 0 2px}
+.galeria{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.galeria div{aspect-ratio:1;border-radius:10px;background-size:cover;background-position:center;display:grid;place-items:center;font-size:30px}
+.recomp{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--linea);border-radius:16px;padding:12px;margin-bottom:10px}
+.recomp .pts{min-width:62px;text-align:center;border-radius:12px;padding:8px 4px;background:#FBF3DF;color:#8a5f08;font:700 16px/1.1 Poppins}
+.recomp .pts small{display:block;font:600 10px Inter;text-transform:uppercase}
+.horario{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;font-size:14px}
+.horario .hoy{font-weight:700}
+.qrbox{background:#fff;border-radius:22px;padding:20px;display:grid;justify-items:center;gap:10px;box-shadow:var(--sombra);text-align:center}
+#qr{width:190px;height:190px;display:grid;place-items:center}
+#qr img,#qr canvas{width:190px!important;height:190px!important}
+.codigo{font:700 20px Poppins;letter-spacing:.12em}
+.pasos{display:grid;gap:10px}
+.paso{display:flex;gap:12px;align-items:flex-start}
+.paso i{width:28px;height:28px;border-radius:50%;background:var(--marca);color:#fff;display:grid;place-items:center;font:700 13px Inter;font-style:normal;flex:none}
+.mov{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--linea);font-size:14px}
+.mov b.mas{color:var(--libre)} .mov b.menos{color:var(--rojo)}
+.cupon{border:2px dashed var(--arena);border-radius:16px;padding:12px 14px;background:#fffdf7;margin-bottom:10px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.cupon.usado{opacity:.5}
+.cupon .cod{font:700 17px Poppins;letter-spacing:.1em}
+.fila-ajuste{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--linea)}
+.sw{position:relative;width:46px;height:26px;flex:none}
+.sw input{opacity:0;position:absolute;inset:0;cursor:pointer;z-index:1;width:100%;height:100%;transform:none}
+.sw span{position:absolute;inset:0;border-radius:99px;background:#cfd2c9;transition:.2s}
+.sw span::after{content:"";position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw input:checked+span{background:var(--libre)}
+.sw input:checked+span::after{left:23px}
+
+/* Mapa */
+.mapa{background:#fff;border-radius:18px;border:1px solid var(--linea);overflow:hidden;position:relative}
+.mapa .desliza{overflow:auto;-webkit-overflow-scrolling:touch}
+.mapa svg{display:block;width:100%;height:auto}
+.movil .mapa svg{width:820px;max-width:none}
+.zona{cursor:pointer;stroke:#fff;stroke-width:1.2;transition:fill-opacity .15s}
+.zona:hover,.zona.sel{fill-opacity:.95!important;stroke:var(--tinta);stroke-width:2.2}
+.etq{font:700 9px Inter;fill:#fff;pointer-events:none;text-anchor:middle;dominant-baseline:central;paint-order:stroke;stroke:rgba(0,0,0,.35);stroke-width:2px}
+.etq.g{font-size:12px}
+.leyenda{display:flex;gap:14px;flex-wrap:wrap;padding:10px 14px;border-top:1px solid var(--linea);font-size:12.5px;color:var(--gris)}
+.leyenda span{display:inline-flex;align-items:center;gap:6px}
+.hoja{position:sticky;bottom:84px;margin-top:12px;background:#fff;border-radius:18px;box-shadow:0 -6px 30px rgba(0,0,0,.12);padding:14px;display:flex;gap:12px;align-items:center;border:1px solid var(--linea)}
+
+/* ---------- Paneles (negocio y administración) ---------- */
+.papp{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.lateral{background:var(--tinta);color:#dfe4d9;padding:18px 14px;position:sticky;top:0;height:100vh;max-height:calc(100vh - 0px);overflow-y:auto;display:flex;flex-direction:column;gap:4px}
+.lateral .quien{display:flex;gap:10px;align-items:center;padding:6px 6px 16px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:10px}
+.lateral .quien b{font:600 15px Poppins;color:#fff;display:block;line-height:1.2}
+.lateral .quien small{font-size:12px;opacity:.7}
+.lateral a{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:12px;text-decoration:none;font-weight:500;font-size:14.5px;color:#cfd5c8}
+.lateral a:hover{background:rgba(255,255,255,.06)}
+.lateral a.on{background:rgba(255,255,255,.12);color:#fff;font-weight:600}
+.lateral .esp{flex:1}
+.contenido{padding:26px 30px 60px;max-width:1150px;width:100%}
+.cabp{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:20px}
+.cabp h1{font-size:26px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.kpi{background:#fff;border:1px solid var(--linea);border-radius:16px;padding:16px}
+.kpi small{color:var(--gris);font-size:12.5px;font-weight:600}
+.kpi b{display:block;font:700 28px Poppins;margin-top:4px}
+.kpi span{font-size:12px;color:var(--libre);font-weight:600}
+.rejilla{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+.barras{display:flex;align-items:flex-end;gap:10px;height:160px;margin-top:14px}
+.barras div{flex:1;display:grid;justify-items:center;gap:6px;font-size:11.5px;color:var(--gris);height:100%;align-content:end}
+.barras i{width:100%;max-width:44px;background:var(--marca);border-radius:8px 8px 3px 3px;display:block}
+.barras b{font-size:12px;color:var(--tinta)}
+.check{display:flex;gap:10px;align-items:center;padding:8px 0;font-size:14px}
+.check i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--rent-s);color:#fff;font-style:normal;flex:none}
+.check.ok i{background:var(--libre)}
+.progreso{height:9px;border-radius:9px;background:var(--rent-s);overflow:hidden;margin:8px 0 6px}
+.progreso i{display:block;height:100%;background:var(--libre)}
+.subir{border:2px dashed var(--linea);border-radius:16px;padding:16px;display:grid;place-items:center;gap:6px;text-align:center;color:var(--gris);cursor:pointer;background:#fff;position:relative;overflow:hidden;background-size:cover;background-position:center;font-size:13px}
+.subir:hover{border-color:var(--marca)}
+.subir input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.subir.con-img{border-style:solid;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.fotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.foto{aspect-ratio:1;border-radius:14px;background-size:cover;background-position:center;position:relative;border:1px solid var(--linea)}
+.foto .herr{position:absolute;bottom:6px;left:6px;right:6px;display:flex;justify-content:space-between}
+.foto .herr button{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.95);display:grid;place-items:center}
+.tabla{width:100%;border-collapse:collapse;background:#fff;font-size:14px}
+.tabla th,.tabla td{padding:11px 12px;border-bottom:1px solid var(--linea);text-align:left;vertical-align:middle}
+.tabla th{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--gris);background:var(--fondo);font-weight:600}
+.tabla-c{border:1px solid var(--linea);border-radius:16px;overflow:auto}
+.lista-f{display:grid;gap:10px}
+.item-f{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--linea);border-radius:14px;padding:10px 12px}
+.item-f .pi{width:54px;height:54px;border-radius:10px;flex:none;display:grid;place-items:center;font-size:24px;background-size:cover;background-position:center}
+.item-f .inf{flex:1;min-width:0}
+.item-f b{font-weight:600}
+.item-f small{display:block;color:var(--gris);font-size:12.5px}
+.item-f.apagado{opacity:.55}
+.hor{display:grid;grid-template-columns:110px auto 1fr 1fr;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--linea)}
+.nota-p{background:var(--marca-suave);border-radius:12px;padding:12px 14px;font-size:13.5px;color:var(--marca-osc)}
+.panel-mov{display:none}
+/* Modal */
+.velo{position:fixed;inset:0;background:rgba(20,24,19,.5);z-index:80;display:none;align-items:center;justify-content:center;padding:16px}
+.velo.on{display:flex}
+.modal{background:#fff;border-radius:22px;width:min(520px,100%);max-height:92vh;overflow-y:auto;padding:22px;position:relative;animation:sube .2s ease}
+@keyframes sube{from{transform:translateY(16px);opacity:0}}
+.modal h3{font-size:20px;margin-bottom:12px;padding-right:36px}
+.modal .x{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;background:var(--fondo);display:grid;place-items:center}
+#toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%) translateY(20px);background:var(--tinta);color:#fff;padding:11px 18px;border-radius:14px;font-size:14px;z-index:99;opacity:0;transition:.25s;pointer-events:none;max-width:90%;text-align:center}
+#toast.on{opacity:1;transform:translateX(-50%)}
+.cambiar{position:fixed;top:12px;right:12px;z-index:60;background:rgba(30,35,29,.88);color:#fff;border-radius:999px;padding:8px 14px;font-size:12.5px;font-weight:600;display:flex;gap:6px;align-items:center;text-decoration:none;backdrop-filter:blur(6px)}
+@media (max-width:900px){
+  .roles{grid-template-columns:1fr}
+  .papp{grid-template-columns:1fr}
+  .lateral{position:sticky;top:0;height:auto;flex-direction:row;overflow-x:auto;padding:10px;z-index:40;gap:6px}
+  .lateral .quien,.lateral .esp{display:none}
+  .lateral a{white-space:nowrap;padding:8px 12px;font-size:13.5px}
+  .contenido{padding:18px 16px 60px}
+  .kpis{grid-template-columns:1fr 1fr}
+  .rejilla{grid-template-columns:1fr}
+  .hor{grid-template-columns:1fr auto;}
+  .hor input[type=time]{grid-column:span 1}
+  .cambiar{top:auto;bottom:16px;right:16px}
+  body.en-cliente .cambiar{bottom:96px}
+}
+@media (max-width:520px){
+  .dos,.tres{grid-template-columns:1fr}
+  .velo{align-items:flex-end;padding:0}
+  .modal{border-radius:22px 22px 0 0;max-height:88vh}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="velo" id="velo"><div class="modal" id="modal"></div></div>
+<div id="toast"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+"use strict";
+/* =====================================================================
+   Paseo Lomas · App (demo)
+   Tres vistas sobre los mismos datos: clientes, negocios y administración.
+   En la demo todo se guarda en el navegador; en producción va a la base de datos.
+   ===================================================================== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const IMG = {plano:'img/plano.jpg', logo:'img/logo.svg'};
+const ICON = {
+  home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+  bolsa:'<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>',
+  mapa:'<polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/>',
+  estrella:'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+  user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  campana:'<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>',
+  corazon:'<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',
+  buscar:'<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+  msj:'<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
+  tel:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
+  pin:'<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+  atras:'<polyline points="15 18 9 12 15 6"/>',
+  rejilla:'<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>',
+  imagen:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>',
+  reloj:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+  etiqueta:'<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>',
+  lista:'<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>',
+  editar:'<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>',
+  regalo:'<polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>',
+  calendario:'<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+  ajustes:'<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>',
+  ojo:'<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',
+  mas:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+  basura:'<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
+  x:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+  check:'<polyline points="20 6 9 17 4 12"/>',
+  usuarios:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  cambiar:'<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>',
+  izq:'<polyline points="15 18 9 12 15 6"/>', der:'<polyline points="9 18 15 12 9 6"/>',
+  edificio:'<rect x="4" y="2" width="16" height="20" rx="2"/><line x1="9" y1="22" x2="9" y2="18"/><line x1="15" y1="22" x2="15" y2="18"/><line x1="8" y1="6" x2="8.01" y2="6"/><line x1="12" y1="6" x2="12.01" y2="6"/><line x1="16" y1="6" x2="16.01" y2="6"/><line x1="8" y1="10" x2="8.01" y2="10"/><line x1="12" y1="10" x2="12.01" y2="10"/><line x1="16" y1="10" x2="16.01" y2="10"/><line x1="8" y1="14" x2="8.01" y2="14"/><line x1="12" y1="14" x2="12.01" y2="14"/><line x1="16" y1="14" x2="16.01" y2="14"/>',
+  megafono:'<path d="M3 11v2a1 1 0 0 0 1 1h3l5 4V6L7 10H4a1 1 0 0 0-1 1z"/><path d="M16 8a5 5 0 0 1 0 8"/><path d="M19 5a9 9 0 0 1 0 14"/>',
+  qr:'<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><line x1="14" y1="14" x2="14" y2="14.01"/><line x1="17" y1="14" x2="21" y2="14"/><line x1="14" y1="17" x2="14" y2="21"/><line x1="17" y1="17" x2="21" y2="21"/>',
+  salir:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>',
+};
+const ic = (n, s = 20) => `<svg class="ic" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICON[n] || ''}</svg>`;
+
+/* ---------------- Plano: locales y anclas ---------------- */
+const mezclar = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+const FRANJAS = [
+  {q:[[257,296],[524,296],[524,361],[257,361]], n:9, zona:'Frente norte'},
+  {q:[[527,291],[787,291],[787,358],[527,358]], n:9, zona:'Frente norte'},
+  {q:[[787,272],[1031,272],[1031,334],[787,334]], n:9, zona:'Frente norte'},
+  {q:[[297,405],[557,652],[512,700],[252,455]], n:12, zona:'Andador poniente'},
+  {q:[[1225,477],[1270,650],[1337,635],[1295,460]], n:6, zona:'Plaza oriente'},
+];
+const LOCALES = [];
+(() => {
+  let num = 1;
+  FRANJAS.forEach(f => {
+    const [A, B, C, D] = f.q;
+    for (let i = 0; i < f.n; i++) {
+      const t0 = i / f.n, t1 = (i + 1) / f.n;
+      LOCALES.push({id:'L' + num, nombre:'Local ' + num, tipo:'local', zona:f.zona, m2:15, esquina:i === 0 || i === f.n - 1,
+        pts:[mezclar(A, B, t0), mezclar(A, B, t1), mezclar(D, C, t1), mezclar(D, C, t0)]});
+      num++;
+    }
+  });
+  const P0 = [655,540], P1 = [1060,900], Q0 = [515,665], Q1 = [800,985];
+  [['A1','Ancla · Pizzería',176.80],['A2','Ancla · Laboratorio clínico',175.08],['A3','Ancla · Gimnasio',175.08],['A4','Ancla · Tienda de conveniencia',180.57]].forEach(([id, nombre, m2], i) => {
+    LOCALES.push({id, nombre, tipo:'ancla', zona:'Huella ancla', m2, pts:[mezclar(P0, P1, i / 4), mezclar(P0, P1, (i + 1) / 4), mezclar(Q0, Q1, (i + 1) / 4), mezclar(Q0, Q1, i / 4)]});
+  });
+  LOCALES.push({id:'A5', nombre:'Ancla · Farmacia', tipo:'ancla', zona:'Huella ancla', m2:180.08, pts:[[1190,688],[1338,648],[1380,810],[1230,845]]});
+  LOCALES.push({id:'A6', nombre:'Fast food con terraza', tipo:'ancla', zona:'Plaza de comida', m2:374.54, pts:[[1065,298],[1200,298],[1255,450],[1105,452]]});
+})();
+const LOC = id => LOCALES.find(l => l.id === id);
+
+/* ---------------- Datos de ejemplo ---------------- */
+const CATS = [
+  {id:'comida', n:'Comida', e:'🍽️'}, {id:'cafe', n:'Café y postres', e:'☕'}, {id:'belleza', n:'Belleza', e:'💇'},
+  {id:'salud', n:'Salud', e:'💊'}, {id:'tiendas', n:'Tiendas', e:'🛍️'}, {id:'servicios', n:'Servicios', e:'🧺'}, {id:'deporte', n:'Deporte', e:'🏋️'},
+];
+const CAT = id => CATS.find(c => c.id === id) || {n:'Otros', e:'🏬'};
+const DIAS = ['dom','lun','mar','mie','jue','vie','sab'];
+const DIAS_N = {dom:'Domingo', lun:'Lunes', mar:'Martes', mie:'Miércoles', jue:'Jueves', vie:'Viernes', sab:'Sábado'};
+
+function semilla() {
+  const hor = (a, c, domingo) => Object.fromEntries(DIAS.map(d => [d, {a, c, cerrado: d === 'dom' && domingo === false}]));
+  const N = (id, nombre, giro, cat, color, emoji, desc, a, c, prods, promo, recomp, extra = {}) => ({
+    id, nombre, giro, cat, color, emoji, desc, logo:'', portada:'', fotos:[],
+    horario: hor(a, c, extra.dom), whatsapp:'2220000000', telefono:'2220000000', instagram:'@' + nombre.toLowerCase().normalize('NFD').replace(/[^a-z0-9]/g, ''), facebook:'', web:'',
+    productos: prods.map(([n, p, cat2, d], i) => ({id:'p' + i, nombre:n, precio:p, cat:cat2 || 'General', desc:d || '', foto:'', activo:true})),
+    promos: [{id:'pr1', titulo:promo[0], desc:promo[1], desde:'2026-11-01', hasta:'2026-12-31', destacada:true, img:''}],
+    recompensas: recomp.map(([t, p, d], i) => ({id:'r' + i, titulo:t, puntos:p, desc:d || ''})),
+    publicado:true, prox:false, codigo:'NEG-' + id,
+  });
+  const negocios = {
+    L1: N('L1','Café Volcanes','Cafetería de especialidad','cafe','#6b3f2a','☕','Café de especialidad de Puebla y Veracruz, pan dulce y desayunos ligeros. Ideal para trabajar o platicar.','07:00','21:00',
+      [['Americano','$38','Bebidas calientes'],['Capuchino','$52','Bebidas calientes'],['Chai latte','$58','Bebidas calientes'],['Frappé de moka','$68','Bebidas frías'],['Concha rellena','$35','Pan','De nata o de cajeta'],['Chilaquiles verdes','$95','Desayunos','Con pollo o huevo']],
+      ['2×1 en americano','De lunes a viernes antes de las 10 am.'], [['Americano gratis',80],['Desayuno gratis',250,'Chilaquiles o molletes con café']]),
+    L2: N('L2','Panadería Lomas','Panadería artesanal','cafe','#b5772f','🥐','Pan artesanal horneado todo el día. Pasteles por encargo para tus fiestas.','07:00','21:00',
+      [['Concha','$14','Pan dulce'],['Cuerno','$18','Pan dulce'],['Rol de canela','$22','Pan dulce'],['Pan de elote','$45','Especialidades'],['Pastel tres leches','$380','Pasteles','Para 12 personas']],
+      ['Pan recién horneado','Todos los días a las 6 pm.'], [['Bolsa de pan (6 piezas)',90]]),
+    L6: N('L6','Barbería El Bigote','Barbería clásica','belleza','#1f2a36','💈','Cortes clásicos y modernos, arreglo de barba con toalla caliente.','10:00','20:00',
+      [['Corte','$180','Servicios'],['Arreglo de barba','$120','Servicios'],['Corte y barba','$260','Servicios'],['Cejas','$60','Servicios']],
+      ['Martes de corte y barba','Corte y barba a $220 todos los martes.'], [['Corte gratis',200]], {dom:false}),
+    L10: N('L10','Florería Jacaranda','Flores y arreglos','tiendas','#7c4a9e','💐','Ramos, arreglos para eventos y plantas. Entregas en Angelópolis.','09:00','20:00',
+      [['Ramo de rosas','$450','Ramos'],['Girasoles','$320','Ramos'],['Arreglo de mesa','$380','Arreglos'],['Suculenta','$95','Plantas']],
+      ['Envío gratis','En toda la zona de Angelópolis.'], [['Suculenta de regalo',100]]),
+    L11: N('L11','Óptica Mirada','Óptica','salud','#1d5c7a','👓','Examen de la vista computarizado, armazones de marca y lentes de contacto.','10:00','20:00',
+      [['Examen de la vista','Gratis','Servicios'],['Armazón + micas','$1,290','Lentes'],['Lentes de sol','$890','Lentes'],['Lentes de contacto','$650','Lentes']],
+      ['Examen de la vista sin costo','Agenda tu cita por WhatsApp.'], [['Limpieza y ajuste gratis',60],['20 % en armazón',300]]),
+    L19: N('L19','Tacos Don Beto','Taquería','comida','#b8321f','🌮','Tacos al pastor al carbón, gringas y campechanos. Salsas de la casa.','13:00','24:00',
+      [['Orden de pastor (5)','$75','Tacos'],['Campechanos (5)','$80','Tacos'],['Gringa','$85','Especialidades'],['Quesadilla','$45','Especialidades'],['Agua de horchata','$30','Bebidas']],
+      ['Martes de pastor','5 tacos de pastor por $60 todos los martes.'], [['Orden de tacos gratis',120]]),
+    L20: N('L20','Estética Nube','Estética y uñas','belleza','#c46a8c','💅','Corte, color, peinados y manicure. Atendemos con cita o sin cita.','10:00','20:00',
+      [['Corte de dama','$250','Cabello'],['Tinte','$650','Cabello'],['Peinado','$350','Cabello'],['Manicure','$220','Uñas']],
+      ['15 % en tu primer tinte','Válido para clientas nuevas.'], [['Manicure gratis',220]], {dom:false}),
+    L27: N('L27','Nieves La Poblanita','Nevería','cafe','#2f8f8a','🍨','Nieves artesanales de garrafa con frutas de temporada.','11:00','21:00',
+      [['Nieve de limón','$35','Nieves'],['Nieve de mamey','$40','Nieves'],['Paleta de fresa','$28','Paletas'],['Mangonada','$65','Especiales']],
+      ['Segunda nieve a mitad de precio','Todos los jueves.'], [['Nieve doble gratis',60]]),
+    L28: N('L28','Papelería Lápiz','Papelería e impresiones','tiendas','#d19a1a','✏️','Útiles escolares, impresiones, copias y engargolados.','08:00','20:00',
+      [['Copias','$1','Impresiones'],['Impresión a color','$8','Impresiones'],['Engargolado','$30','Servicios'],['Lista escolar','desde $350','Escolar']],
+      ['Surtimos tu lista escolar','Déjala por WhatsApp y pasa por ella.'], [['50 impresiones gratis',100]]),
+    L35: N('L35','Celulares Conecta','Accesorios y reparación','tiendas','#2449a8','📱','Fundas, micas, cargadores y reparación de celulares el mismo día.','10:00','20:00',
+      [['Funda','$199','Accesorios'],['Mica de cristal','$149','Accesorios'],['Cargador rápido','$299','Accesorios'],['Cambio de pantalla','desde $890','Reparación']],
+      ['Mica gratis','Al cambiar tu pantalla con nosotros.'], [['Mica de cristal gratis',150]]),
+    L45: N('L45','Tintorería Burbuja','Tintorería','servicios','#3f8fc4','👔','Lavado en seco, planchado y edredones. Listo en 24 horas.','08:00','20:00',
+      [['Traje','$160','Prendas'],['Camisa','$45','Prendas'],['Vestido','$180','Prendas'],['Edredón','$220','Blancos']],
+      ['Listo en 24 horas','Sin costo extra.'], [['Lavado de 3 camisas',90]], {dom:false}),
+    A1: N('A1','Pizzería Forno','Pizzería','comida','#9b2d20','🍕','Pizza al horno de piedra, alitas y pastas. Para comer aquí o llevar.','12:00','23:00',
+      [['Pizza pepperoni','$189','Pizzas'],['Pizza hawaiana','$199','Pizzas'],['Alitas (10 pzas)','$165','Entradas'],['Refresco','$30','Bebidas']],
+      ['Miércoles de pizza','La segunda pizza a mitad de precio.'], [['Pizza mediana gratis',300]]),
+    A3: N('A3','Gym Fuerza','Gimnasio','deporte','#2a2a2a','🏋️','Pesas, cardio y clases grupales. Abierto desde las 6 am.','06:00','23:00',
+      [['Inscripción','$0','Membresías'],['Mensualidad','$599','Membresías'],['Visita','$80','Membresías'],['Clase de spinning','$70','Clases']],
+      ['Inscripción gratis','Todo este mes.'], [['Una semana gratis',250]]),
+    A4: N('A4','Mini Súper 24/7','Tienda de conveniencia','tiendas','#c2401a','🛒','Abarrotes, bebidas frías, café y botanas a cualquier hora.','00:00','24:00',
+      [['Café de grano','$29','Café'],['Garrafón','$45','Abarrotes'],['Bolsa de hielo','$35','Abarrotes'],['Pan dulce','$14','Panadería']],
+      ['Café a $29','Todo el día, todos los días.'], [['Café gratis',50]]),
+    A5: N('A5','Farmacia del Parque','Farmacia','salud','#1b8a5a','💊','Medicamentos, consulta médica y toma de presión.','08:00','23:00',
+      [['Consulta médica','$50','Servicios'],['Toma de presión','Gratis','Servicios'],['Paracetamol','$35','Medicamentos'],['Vitamina C','$89','Vitaminas']],
+      ['Toma de presión sin costo','Todos los días.'], [['Consulta médica gratis',100]]),
+  };
+  [['L4','Boutique Alma','Ropa y accesorios','tiendas','#a0525a','👗'],['L13','Joyería Plata Fina','Joyería','tiendas','#6d6d6d','💍'],['L22','Nutrióloga Equilibrio','Consultorio de nutrición','salud','#5a8f4e','🥗'],['L31','Studio Coral','Uñas y pestañas','belleza','#e07a5f','💅'],['L41','Viajes Rumbo','Agencia de viajes','servicios','#2a6f97','✈️'],['A2','Laboratorio Vital','Laboratorio clínico','salud','#2f7f9e','🧪']]
+    .forEach(([id, nombre, giro, cat, color, emoji]) => {
+      negocios[id] = N(id, nombre, giro, cat, color, emoji, 'Muy pronto en Paseo Lomas.', '10:00', '20:00', [], ['Gran apertura', 'Pronto anunciaremos nuestras promociones de apertura.'], []);
+      Object.assign(negocios[id], {prox:true, promos:[], recompensas:[]});
+    });
+  const stats = {};
+  Object.keys(negocios).forEach((id, k) => {
+    const base = 30 + (k * 37) % 70;
+    stats[id] = {visitas:[0,1,2,3,4,5,6].map(d => base + ((d * 13 + k * 7) % 25)), wa:12 + (k * 11) % 40, pts:400 + (k * 173) % 900, cupones:3 + k % 9};
+  });
+  const hoy = new Date();
+  const fecha = d => { const x = new Date(hoy); x.setDate(x.getDate() + d); return x.toISOString().slice(0, 10); };
+  return {
+    v:1,
+    rentas:{},     // id -> {estado, renta}
+    negocios, stats,
+    cliente:{nombre:'Mariana', correo:'mariana@correo.com', codigo:'PL-4821', puntos:340, acumulados:620, favoritos:['L1','L19'],
+      notif:{promos:true, eventos:true, puntos:true},
+      historial:[
+        {f:fecha(-1), t:'Tacos Don Beto', d:'Compra de $240', p:24},
+        {f:fecha(-3), t:'Café Volcanes', d:'Compra de $180', p:18},
+        {f:fecha(-6), t:'Bono de bienvenida', d:'Por descargar la app', p:100},
+        {f:fecha(-9), t:'Farmacia del Parque', d:'Compra de $560', p:56},
+      ],
+      cupones:[]},
+    solicitudes:[],
+    avisos:[
+      {id:'e1', tipo:'evento', titulo:'Noche de food trucks', texto:'Música en vivo y food trucks en el estacionamiento.', fecha:fecha(3), para:'todos'},
+      {id:'e2', tipo:'evento', titulo:'Bazar navideño', texto:'Emprendedores locales, regalos y talleres para niños.', fecha:'2026-12-14', para:'todos'},
+      {id:'e3', tipo:'aviso', titulo:'Mantenimiento del estacionamiento', texto:'El martes de 7 a 9 am se pintarán los cajones de la zona norte.', fecha:fecha(5), para:'negocios'},
+    ],
+    config:{programa:'Puntos Lomas', pesosPorPunto:10, bono:100, niveles:[['Bronce',0],['Plata',500],['Oro',1500]], clientes:1248},
+    movs:[],
+    sesion:null,
+  };
+}
+
+/* ---------------- Guardado ---------------- */
+const CLAVE = 'paseo-lomas-app-v1';
+let DB;
+try { DB = JSON.parse(localStorage.getItem(CLAVE)); } catch (e) {}
+if (!DB || DB.v !== 1) DB = semilla();
+function guardar() {
+  try { localStorage.setItem(CLAVE, JSON.stringify(DB)); }
+  catch (e) { toast('El navegador se quedó sin espacio para la demo. Usa imágenes más ligeras o reinicia la demo.'); }
+}
+const EJ_APART = ['L4','L13','L22','L31','L41','A2'], EJ_RENT = ['L1','L2','L6','L10','L11','L19','L20','L27','L28','L35','L45','A1','A3','A4','A5'];
+const estadoDe = id => (DB.rentas[id] && DB.rentas[id].estado) || (EJ_RENT.includes(id) ? 'rentado' : EJ_APART.includes(id) ? 'apartado' : 'libre');
+const rentaDe = id => (DB.rentas[id] && DB.rentas[id].renta) || 0;
+const pesos = n => n ? '$' + Math.round(n).toLocaleString('es-MX') : '$0000';
+const ETQ = {libre:'Disponible', apartado:'Apartado', rentado:'Rentado'};
+const negociosVisibles = () => Object.values(DB.negocios).filter(n => n.publicado && !n.prox && estadoDe(n.id) !== 'libre');
+const negociosProx = () => Object.values(DB.negocios).filter(n => n.publicado && n.prox && estadoDe(n.id) !== 'libre');
+
+/* ---------------- Utilidades ---------------- */
+function abiertoAhora(n, ahora = new Date()) {
+  const h = n.horario[DIAS[ahora.getDay()]]; if (!h || h.cerrado) return false;
+  const m = ahora.getHours() * 60 + ahora.getMinutes();
+  const aM = +h.a.slice(0, 2) * 60 + +h.a.slice(3), cM = +h.c.slice(0, 2) * 60 + +h.c.slice(3);
+  return cM > aM ? m >= aM && m < cM : (m >= aM || m < cM);
+}
+const horaTxt = h => h.cerrado ? 'Cerrado' : (h.a === '00:00' && h.c === '24:00' ? 'Abierto 24 horas' : `${h.a} a ${h.c}`);
+const hoyTxt = n => horaTxt(n.horario[DIAS[new Date().getDay()]]);
+function nivel(acum) {
+  const nv = DB.config.niveles; let i = 0; while (i + 1 < nv.length && acum >= nv[i + 1][1]) i++;
+  const sig = nv[i + 1]; return {n:nv[i][0], sig:sig && sig[0], falta:sig ? sig[1] - acum : 0, pct:sig ? Math.round((acum - nv[i][1]) / (sig[1] - nv[i][1]) * 100) : 100};
+}
+const fFecha = s => new Date(s + 'T12:00:00').toLocaleDateString('es-MX', {day:'numeric', month:'short'});
+const codigo = (p = '') => p + Math.random().toString(36).slice(2, 6).toUpperCase();
+const logoHTML = (n, s = 44) => n.logo
+  ? `<div class="logo" style="width:${s}px;height:${s}px;background-image:url(${n.logo})"></div>`
+  : `<div class="logo" style="width:${s}px;height:${s}px;background:${n.color};font-size:${Math.round(s * .36)}px">${esc(n.nombre.split(/\s+/).filter(w => w.length > 2).slice(0, 2).map(w => w[0]).join('').toUpperCase())}</div>`;
+const fondoNeg = (n, img) => img ? `background-image:url(${img})` : `background:linear-gradient(135deg,${n.color},${n.color}bb)`;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2800); }
+function modal(html) { $('#modal').innerHTML = `<button class="x" data-a="cerrarModal" aria-label="Cerrar">${ic('x', 18)}</button>` + html; $('#velo').classList.add('on'); }
+function cerrarModal() { $('#velo').classList.remove('on'); }
+$('#velo').addEventListener('click', e => { if (e.target.id === 'velo') cerrarModal(); });
+function leerImagen(file, max = 1100) {
+  return new Promise((res, rej) => {
+    if (!file || !file.type.startsWith('image/')) return rej(new Error('No es una imagen'));
+    const fr = new FileReader();
+    fr.onload = () => { const im = new Image(); im.onload = () => {
+      const k = Math.min(1, max / Math.max(im.width, im.height));
+      const c = document.createElement('canvas'); c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+      c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); res(c.toDataURL('image/jpeg', .78));
+    }; im.onerror = rej; im.src = fr.result; };
+    fr.onerror = rej; fr.readAsDataURL(file);
+  });
+}
+
+/* ---------------- Mapa del plano ---------------- */
+function mapaSVG(colorear, accion, sel) {
+  const pol = LOCALES.map(l => {
+    const c = colorear(l); if (!c) return '';
+    const cx = l.pts.reduce((s, p) => s + p[0], 0) / 4, cy = l.pts.reduce((s, p) => s + p[1], 0) / 4;
+    return `<polygon class="zona${sel === l.id ? ' sel' : ''}" data-a="${accion}" data-id="${l.id}" points="${l.pts.map(p => p.join(',')).join(' ')}" style="fill:${c.f};fill-opacity:${c.o ?? .6}"><title>${esc(c.t || l.nombre)}</title></polygon>
+      <text class="etq${l.tipo === 'ancla' ? ' g' : ''}" x="${cx}" y="${cy}">${c.e ?? (l.tipo === 'ancla' ? l.id : l.id.slice(1))}</text>`;
+  }).join('');
+  return `<svg viewBox="40 230 1380 785" role="img" aria-label="Plano de Paseo Lomas"><image href="${IMG.plano}" x="40" y="230" width="1380" height="785"/>${pol}</svg>`;
+}
+
+/* =====================================================================
+   VISTA 0 · Elegir cómo entrar
+   ===================================================================== */
+function vInicio() {
+  return `<div class="inicio">
+    <div class="cab"><img src="${IMG.logo}" alt=""><b>Paseo Lomas</b></div>
+    <div class="centro">
+      <h1>La app de Paseo Lomas</h1>
+      <p class="lead">Una sola plataforma para quienes visitan la plaza, para los negocios que la habitan y para la administración.</p>
+      <div class="roles">
+        <a class="rol" href="#/c/inicio"><div class="ico">${ic('user', 24)}</div><h3>Clientes</h3><p>Tiendas, promociones, mapa de la plaza, puntos y recompensas.</p><span>Abrir la app →</span></a>
+        <a class="rol" href="#/n"><div class="ico">${ic('bolsa', 24)}</div><h3>Mi negocio</h3><p>Cada local sube sus fotos, menú, promociones y horarios, y da puntos a sus clientes.</p><span>Entrar al panel →</span></a>
+        <a class="rol" href="#/a/resumen"><div class="ico">${ic('edificio', 24)}</div><h3>Administración</h3><p>Rentas de locales, alta de negocios, avisos, eventos y programa de puntos.</p><span>Entrar a administración →</span></a>
+      </div>
+      <p style="margin-top:18px;font-size:12.5px;opacity:.8">Versión de demostración: los negocios, precios y datos son de ejemplo y se guardan solo en este navegador.</p>
+    </div>
+  </div>`;
+}
+
+/* =====================================================================
+   VISTA 1 · App de clientes
+   ===================================================================== */
+const ST = {q:'', cat:'', tab:'menu', selMapa:null, filtroRenta:'libre'};
+function cShell(tab, cuerpo) {
+  const av = DB.avisos.filter(a => a.para !== 'negocios').length;
+  const t = (h, i, n) => `<a href="#/c/${h}" class="${tab === h ? 'on' : ''}">${ic(i, 22)}${n}</a>`;
+  return `<div class="escena-movil"><div class="movil">
+    <header class="c-top"><img src="${IMG.logo}" alt=""><b>Paseo Lomas</b>
+      <button class="ibtn" data-a="verAvisos" aria-label="Avisos">${ic('campana', 19)}${av ? `<span class="badge">${av}</span>` : ''}</button></header>
+    ${cuerpo}
+    <nav class="c-nav">${t('inicio','home','Inicio')}${t('tiendas','bolsa','Tiendas')}${t('mapa','mapa','Mapa')}${t('puntos','estrella','Puntos')}${t('perfil','user','Perfil')}</nav>
+  </div></div>`;
+}
+function cardPromo(n, p) {
+  return `<a class="promo" href="#/c/tienda/${n.id}"><div class="img" style="${fondoNeg(n, p.img)}">${p.img ? '' : n.emoji}</div>
+    <div class="txt"><b>${esc(p.titulo)}</b><small>${esc(n.nombre)} · ${esc(p.desc)}</small></div></a>`;
+}
+function vcInicio() {
+  const c = DB.cliente, nv = nivel(c.acumulados), cfg = DB.config;
+  const promos = negociosVisibles().flatMap(n => n.promos.filter(p => p.destacada).map(p => [n, p]));
+  const abiertos = negociosVisibles().filter(n => abiertoAhora(n));
+  const eventos = DB.avisos.filter(a => a.tipo === 'evento' && a.para !== 'negocios');
+  return cShell('inicio', `
+    <div class="hero"><div><small>Blvd. de los Volcanes 400 · Lomas de Angelópolis</small><h1>Hola, ${esc(c.nombre)}</h1></div></div>
+    <div class="tpuntos" data-a="ir" data-h="#/c/puntos">
+      <div class="fila"><div><small style="opacity:.85">${esc(cfg.programa)}</small><div><b>${c.puntos}</b> <span style="opacity:.85">puntos</span></div></div><span class="nivel">Nivel ${nv.n}</span></div>
+      <div class="barra"><i style="width:${nv.pct}%"></i></div>
+      <small style="opacity:.85">${nv.sig ? `Te faltan ${nv.falta} puntos para nivel ${nv.sig}` : 'Tienes el nivel más alto'} · Toca para ver tu código</small>
+    </div>
+    <div class="c-sec">
+      <h2 class="t">Promociones <a href="#/c/tiendas">Ver tiendas</a></h2>
+      <div class="carrusel">${promos.map(([n, p]) => cardPromo(n, p)).join('') || '<div class="vacio">Sin promociones por ahora.</div>'}</div>
+      <h2 class="t">Categorías</h2>
+      <div class="cats">${CATS.map(k => `<button class="cat" data-a="verCat" data-cat="${k.id}"><span>${k.e}</span>${k.n}</button>`).join('')}<button class="cat" data-a="verCat" data-cat=""><span>🏬</span>Todas</button></div>
+      <h2 class="t">Abierto ahora <a href="#/c/mapa">Ver mapa</a></h2>
+      <div class="carrusel">${abiertos.map(n => `<a class="mini" href="#/c/tienda/${n.id}" style="text-decoration:none">${logoHTML(n, 52)}<b>${esc(n.nombre)}</b><small>${esc(hoyTxt(n))}</small></a>`).join('') || '<div class="vacio">Ahorita no hay negocios abiertos.</div>'}</div>
+      ${negociosProx().length ? `<h2 class="t">Próximamente</h2><div class="carrusel">${negociosProx().map(n => `<div class="mini">${logoHTML(n, 52)}<b>${esc(n.nombre)}</b><small>${esc(n.giro)}</small></div>`).join('')}</div>` : ''}
+      <h2 class="t">Eventos en la plaza</h2>
+      ${eventos.map(eventoHTML).join('') || '<div class="vacio">No hay eventos próximos.</div>'}
+      <div class="banner" data-a="ir" data-h="#/c/rentar"><h3>¿Quieres abrir tu negocio aquí?</h3><p>Conoce los locales disponibles en Paseo Lomas.</p><span class="btn chico">Ver locales en renta</span></div>
+    </div>`);
+}
+function eventoHTML(a) {
+  const d = new Date(a.fecha + 'T12:00:00');
+  return `<div class="evento"><div class="fecha"><div>${d.getDate()}<small>${d.toLocaleDateString('es-MX', {month:'short'}).replace('.', '')}</small></div></div>
+    <div><b>${esc(a.titulo)}</b><span class="sub">${esc(a.texto)}</span></div></div>`;
+}
+function vcTiendas() {
+  return cShell('tiendas', `<div class="c-sec">
+    <div class="buscar">${ic('buscar', 18)}<input id="busca" placeholder="Busca tienda, producto o servicio" value="${esc(ST.q)}" data-in="q" autocomplete="off"></div>
+    <div class="fchips"><button class="chip ${ST.cat ? '' : 'on'}" data-a="verCat" data-cat="">Todas</button>${CATS.map(k => `<button class="chip ${ST.cat === k.id ? 'on' : ''}" data-a="verCat" data-cat="${k.id}">${k.e} ${k.n}</button>`).join('')}</div>
+    <div id="listaTiendas">${listaTiendas()}</div></div>`);
+}
+function listaTiendas() {
+  const q = ST.q.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const ls = negociosVisibles().filter(n => (!ST.cat || n.cat === ST.cat) && (!q || norm(n.nombre + ' ' + n.giro + ' ' + n.productos.map(p => p.nombre).join(' ')).includes(q)));
+  if (!ls.length) return '<div class="vacio">No encontramos negocios con esa búsqueda.</div>';
+  return ls.map(n => {
+    const ab = abiertoAhora(n), fav = DB.cliente.favoritos.includes(n.id);
+    return `<a class="tienda" href="#/c/tienda/${n.id}" style="text-decoration:none">
+      <div class="th" style="${fondoNeg(n, n.portada)}">${n.portada ? '' : n.emoji}${logoHTML(n, 32)}</div>
+      <div class="inf"><b>${esc(n.nombre)}</b><span class="sub">${esc(n.giro)} · ${esc(LOC(n.id).nombre)}</span>
+        <div class="meta"><span class="estado ${ab ? 'abierto' : 'cerrado'}">${ab ? 'Abierto' : 'Cerrado'}</span><span class="sub">${esc(hoyTxt(n))}</span>${n.promos.length ? '<span class="estado prox">Promo</span>' : ''}</div></div>
+      <span class="fav ${fav ? 'on' : ''}">${ic('corazon', 20)}</span></a>`;
+  }).join('');
+}
+function vcTienda(id) {
+  const n = DB.negocios[id]; if (!n) return vcTiendas();
+  if (!vcTienda.visto || vcTienda.visto !== id) { vcTienda.visto = id; DB.stats[id].visitas[6]++; guardar(); }
+  const ab = abiertoAhora(n), fav = DB.cliente.favoritos.includes(id);
+  const tabs = [['menu', n.cat === 'comida' || n.cat === 'cafe' ? 'Menú' : 'Productos y servicios'], ['promos', 'Promociones'], ['recomp', 'Recompensas'], ['fotos', 'Fotos'], ['info', 'Información']];
+  if (!tabs.some(t => t[0] === ST.tab)) ST.tab = 'menu';
+  let cuerpo = '';
+  if (ST.tab === 'menu') {
+    const act = n.productos.filter(p => p.activo);
+    const grupos = [...new Set(act.map(p => p.cat))];
+    cuerpo = grupos.map(g => `<div class="gcat">${esc(g)}</div>` + act.filter(p => p.cat === g).map(p => `<div class="prod"><div class="pi" style="${fondoNeg(n, p.foto)};opacity:${p.foto ? 1 : .9}">${p.foto ? '' : n.emoji}</div><div class="pn"><b>${esc(p.nombre)}</b>${p.desc ? `<small>${esc(p.desc)}</small>` : ''}</div><div class="pp">${esc(p.precio)}</div></div>`).join('')).join('') || '<div class="vacio">Este negocio aún no carga su menú.</div>';
+  } else if (ST.tab === 'promos') {
+    cuerpo = n.promos.map(p => `<div class="tarjeta" style="margin-bottom:10px;padding:0;overflow:hidden">${p.img ? `<div style="height:150px;background:url(${p.img}) center/cover"></div>` : ''}<div style="padding:14px"><b style="font:600 16px Poppins">${esc(p.titulo)}</b><p class="sub" style="margin:4px 0">${esc(p.desc)}</p><small class="sub">Válida del ${fFecha(p.desde)} al ${fFecha(p.hasta)}</small></div></div>`).join('') || '<div class="vacio">Sin promociones por ahora.</div>';
+  } else if (ST.tab === 'recomp') {
+    cuerpo = `<p class="sub" style="margin-bottom:12px">Canjea tus ${esc(DB.config.programa)}. Tienes <b style="color:var(--tinta)">${DB.cliente.puntos} puntos</b>.</p>` +
+      (n.recompensas.map(r => `<div class="recomp"><div class="pts">${r.puntos}<small>puntos</small></div><div style="flex:1"><b>${esc(r.titulo)}</b>${r.desc ? `<div class="sub">${esc(r.desc)}</div>` : ''}</div>
+        <button class="btn chico" data-a="canjear" data-n="${id}" data-r="${r.id}" ${DB.cliente.puntos < r.puntos ? 'disabled' : ''}>Canjear</button></div>`).join('') || '<div class="vacio">Este negocio aún no tiene recompensas.</div>');
+  } else if (ST.tab === 'fotos') {
+    cuerpo = n.fotos.length ? `<div class="galeria">${n.fotos.map(f => `<div style="background-image:url(${f})" data-a="verFoto" data-src="${f}"></div>`).join('')}</div>` :
+      `<div class="galeria">${[1,2,3].map(() => `<div style="${fondoNeg(n)};opacity:.55">${n.emoji}</div>`).join('')}</div><p class="vacio">El negocio todavía no sube fotos.</p>`;
+  } else {
+    const hoy = DIAS[new Date().getDay()];
+    cuerpo = `<p style="margin-bottom:16px">${esc(n.desc)}</p>
+      <h4 style="margin-bottom:8px">Horario</h4><div class="horario">${['lun','mar','mie','jue','vie','sab','dom'].map(d => `<span class="${d === hoy ? 'hoy' : ''}">${DIAS_N[d]}</span><span class="${d === hoy ? 'hoy' : ''}">${horaTxt(n.horario[d])}</span>`).join('')}</div>
+      <h4 style="margin:18px 0 8px">Contacto y redes</h4>
+      <div class="sub" style="display:grid;gap:6px">${n.telefono ? `<span>${ic('tel', 15)} ${esc(n.telefono)}</span>` : ''}${n.instagram ? `<span>Instagram: ${esc(n.instagram)}</span>` : ''}${n.facebook ? `<span>Facebook: ${esc(n.facebook)}</span>` : ''}${n.web ? `<span>Web: ${esc(n.web)}</span>` : ''}<span>${ic('pin', 15)} ${esc(LOC(id).nombre)} · ${esc(LOC(id).zona)}</span></div>`;
+  }
+  return cShell('tiendas', `
+    <div class="portada" style="${fondoNeg(n, n.portada)}">${n.portada ? '' : n.emoji}
+      <a class="ibtn volver" href="#/c/tiendas" aria-label="Volver">${ic('atras', 20)}</a>
+      <button class="ibtn fav-b fav ${fav ? 'on' : ''}" data-a="fav" data-id="${id}" aria-label="Favorito">${ic('corazon', 19)}</button></div>
+    <div class="ficha">
+      <div class="cabf">${logoHTML(n, 72)}<div style="padding-bottom:4px"><span class="estado ${ab ? 'abierto' : 'cerrado'}">${ab ? 'Abierto ahora' : 'Cerrado'}</span></div></div>
+      <h1>${esc(n.nombre)}</h1><div class="sub">${esc(n.giro)} · Hoy ${esc(hoyTxt(n))}</div>
+      <div class="acciones4">
+        <button class="acc" data-a="whats" data-id="${id}">${ic('msj', 20)}WhatsApp</button>
+        <button class="acc" data-a="llamar" data-id="${id}">${ic('tel', 20)}Llamar</button>
+        <button class="acc" data-a="ubicar" data-id="${id}">${ic('pin', 20)}Ubicar</button>
+        <button class="acc" data-a="ir" data-h="#/c/puntos">${ic('qr', 20)}Mis puntos</button>
+      </div>
+      <div class="tabs">${tabs.map(([k, t]) => `<button class="${ST.tab === k ? 'on' : ''}" data-a="tab" data-t="${k}">${t}</button>`).join('')}</div>
+      ${cuerpo}
+    </div>`);
+}
+function vcMapa() {
+  const sel = ST.selMapa;
+  const svg = mapaSVG(l => {
+    const n = DB.negocios[l.id], e = estadoDe(l.id);
+    if (e === 'libre') return {f:'#2E9E5B', o:.35, e:'', t:l.nombre + ' · disponible'};
+    if (n && n.publicado && !n.prox) return {f:n.color, o:.8, e:n.emoji, t:n.nombre};
+    return {f:'#D79A1E', o:.45, e:'', t:(n ? n.nombre : l.nombre) + ' · próximamente'};
+  }, 'selMapa', sel);
+  let hoja = '';
+  if (sel) {
+    const n = DB.negocios[sel], l = LOC(sel), e = estadoDe(sel);
+    if (e === 'libre') hoja = `<div class="hoja"><div style="width:44px;height:44px;border-radius:12px;background:var(--libre-s);display:grid;place-items:center;color:var(--libre)">${ic('edificio', 22)}</div><div style="flex:1"><b>${esc(l.nombre)}</b><div class="sub">${l.m2} m² · disponible</div></div><a class="btn chico" href="#/c/rentar/${sel}">Rentar</a></div>`;
+    else if (n && !n.prox) hoja = `<div class="hoja">${logoHTML(n, 44)}<div style="flex:1;min-width:0"><b>${esc(n.nombre)}</b><div class="sub">${esc(n.giro)} · ${abiertoAhora(n) ? 'Abierto' : 'Cerrado'}</div></div><a class="btn chico" href="#/c/tienda/${sel}">Ver</a></div>`;
+    else hoja = `<div class="hoja">${n ? logoHTML(n, 44) : ''}<div style="flex:1"><b>${esc(n ? n.nombre : l.nombre)}</b><div class="sub">Próximamente</div></div></div>`;
+  }
+  return cShell('mapa', `<div class="c-sec">
+    <h2 style="font-size:20px">Mapa de la plaza</h2><p class="sub" style="margin-bottom:12px">Desliza el plano y toca un local.</p>
+    <div class="mapa"><div class="desliza" id="desliza">${svg}</div>
+      <div class="leyenda"><span><i class="punto" style="background:var(--marca)"></i>Negocios</span><span><i class="punto" style="background:var(--apart)"></i>Próximamente</span><span><i class="punto" style="background:var(--libre)"></i>En renta</span></div></div>
+    ${hoja}</div>`);
+}
+function vcPuntos() {
+  const c = DB.cliente, nv = nivel(c.acumulados), cfg = DB.config;
+  const activos = c.cupones.filter(k => !k.usado), usados = c.cupones.filter(k => k.usado);
+  return cShell('puntos', `<div class="c-sec">
+    <div class="qrbox"><small class="sub">Muestra este código al pagar en cualquier negocio de la plaza</small><div id="qr"></div><div class="codigo">${c.codigo}</div>
+      <div style="display:flex;gap:18px;align-items:center"><div><b style="font:800 30px Poppins">${c.puntos}</b><div class="sub">puntos disponibles</div></div><span class="estado prox" style="font-size:12px">Nivel ${nv.n}</span></div>
+      <div class="progreso" style="width:100%"><i style="width:${nv.pct}%"></i></div><small class="sub">${nv.sig ? `${nv.falta} puntos más para nivel ${nv.sig}` : 'Nivel máximo'}</small></div>
+    <h2 class="t">Cómo ganar puntos</h2>
+    <div class="pasos tarjeta">
+      <div class="paso"><i>1</i><div><b>Compra en Paseo Lomas</b><div class="sub">Ganas 1 punto por cada $${cfg.pesosPorPunto} en cualquier negocio de la plaza.</div></div></div>
+      <div class="paso"><i>2</i><div><b>Muestra tu código</b><div class="sub">El negocio escanea tu QR o escribe ${c.codigo}.</div></div></div>
+      <div class="paso"><i>3</i><div><b>Canjea recompensas</b><div class="sub">Café, descuentos, servicios gratis y más en cada tienda.</div></div></div>
+    </div>
+    <h2 class="t">Mis cupones</h2>
+    ${activos.map(k => `<div class="cupon"><div><b>${esc(k.titulo)}</b><div class="sub">${esc(k.negocio)}</div></div><div style="text-align:right"><div class="cod">${k.codigo}</div><small class="sub">Muéstralo en caja</small></div></div>`).join('') || '<p class="sub">Aún no tienes cupones. Canjea tus puntos en la sección Recompensas de cada tienda.</p>'}
+    ${usados.map(k => `<div class="cupon usado"><div><b>${esc(k.titulo)}</b><div class="sub">${esc(k.negocio)} · usado</div></div><div class="cod">${k.codigo}</div></div>`).join('')}
+    <h2 class="t">Recompensas para ti</h2>
+    <div class="carrusel">${negociosVisibles().flatMap(n => n.recompensas.map(r => [n, r])).sort((a, b) => a[1].puntos - b[1].puntos).slice(0, 10).map(([n, r]) =>
+      `<a class="promo" href="#/c/tienda/${n.id}" data-a="tabRecomp" style="width:200px"><div class="img" style="${fondoNeg(n)};height:80px;font-size:34px">${n.emoji}</div><div class="txt"><b>${esc(r.titulo)}</b><small>${esc(n.nombre)} · ${r.puntos} pts</small></div></a>`).join('')}</div>
+    <h2 class="t">Historial</h2>
+    <div class="tarjeta" style="padding:4px 14px">${c.historial.map(h => `<div class="mov"><div><b style="font-weight:600">${esc(h.t)}</b><div class="sub">${esc(h.d)} · ${fFecha(h.f)}</div></div><b class="${h.p >= 0 ? 'mas' : 'menos'}">${h.p >= 0 ? '+' : ''}${h.p}</b></div>`).join('')}</div>
+  </div>`);
+}
+function vcPerfil() {
+  const c = DB.cliente, favs = c.favoritos.map(id => DB.negocios[id]).filter(Boolean);
+  const sw = (k, t, d) => `<div class="fila-ajuste"><div><b style="font-weight:600">${t}</b><div class="sub">${d}</div></div><label class="sw"><input type="checkbox" data-ch="notif" data-k="${k}" ${c.notif[k] ? 'checked' : ''}><span></span></label></div>`;
+  return cShell('perfil', `<div class="c-sec">
+    <div style="display:flex;gap:14px;align-items:center;margin-bottom:16px"><div class="logo" style="width:64px;height:64px;background:var(--marca);font-size:24px">${esc(c.nombre[0] || '?')}</div>
+      <div><h2 style="font-size:21px">${esc(c.nombre)}</h2><div class="sub">${esc(c.correo)} · ${c.codigo}</div></div></div>
+    <form class="form tarjeta" data-f="perfilCliente"><label>Nombre<input name="nombre" value="${esc(c.nombre)}" required></label><label>Correo<input name="correo" type="email" value="${esc(c.correo)}"></label><button class="btn">Guardar</button></form>
+    <h2 class="t">Mis favoritos</h2>
+    ${favs.map(n => `<a class="tienda" href="#/c/tienda/${n.id}" style="text-decoration:none;padding:8px">${logoHTML(n, 44)}<div class="inf"><b>${esc(n.nombre)}</b><span class="sub">${esc(n.giro)}</span></div>${ic('der', 18)}</a>`).join('') || '<p class="sub">Toca el corazón en una tienda para guardarla aquí.</p>'}
+    <h2 class="t">Notificaciones</h2>
+    <div class="tarjeta" style="padding:0 14px">${sw('promos', 'Promociones', 'Ofertas de tus tiendas favoritas')}${sw('eventos', 'Eventos', 'Bazares, música y actividades en la plaza')}${sw('puntos', 'Puntos', 'Cuando ganes o canjees puntos')}</div>
+    <h2 class="t">Paseo Lomas</h2>
+    <div class="tarjeta" style="display:grid;gap:10px"><a class="btn sec ancho" href="#/c/rentar">Rentar un local en la plaza</a><a class="btn suave ancho" href="#/c/mapa">Cómo llegar · Blvd. de los Volcanes 400</a></div>
+  </div>`);
+}
+function vcRentar(id) {
+  const f = ST.filtroRenta;
+  const svg = mapaSVG(l => {
+    const e = estadoDe(l.id);
+    const col = {libre:'#2E9E5B', apartado:'#D79A1E', rentado:'#9A9C93'}[e];
+    return {f:col, o:(f === 'todos' || f === e) ? (e === 'rentado' ? .45 : .6) : .08, t:`${l.nombre} · ${ETQ[e]}`};
+  }, 'rentarLocal', id);
+  const ls = LOCALES.filter(l => f === 'todos' || estadoDe(l.id) === f);
+  return cShell('perfil', `<div class="c-sec">
+    <a href="#/c/inicio" class="sub" style="text-decoration:none">${ic('atras', 15)} Inicio</a>
+    <h2 style="font-size:21px;margin-top:6px">Locales en renta</h2><p class="sub" style="margin-bottom:12px">Toca un local en el plano para ver sus datos y solicitarlo.</p>
+    <div class="fchips" style="margin-top:0">${[['libre','Disponibles'],['apartado','Apartados'],['todos','Todos']].map(([k, t]) => `<button class="chip ${f === k ? 'on' : ''}" data-a="filtroRenta" data-f="${k}">${t}</button>`).join('')}</div>
+    <div class="mapa"><div class="desliza">${svg}</div><div class="leyenda"><span><i class="punto p" style="background:var(--libre)"></i>Disponible</span><span><i class="punto" style="background:var(--apart)"></i>Apartado</span><span><i class="punto" style="background:var(--rent)"></i>Rentado</span></div></div>
+    <div style="display:grid;gap:10px;margin-top:14px">${ls.map(l => { const e = estadoDe(l.id); return `<button class="tienda" style="margin:0" data-a="rentarLocal" data-id="${l.id}"><div class="inf"><b>${esc(l.nombre)}</b><span class="sub">${l.m2} m² · ${esc(l.zona)}</span></div><div style="text-align:right"><span class="estado ${e}">${ETQ[e]}</span><div style="font:700 15px Poppins;margin-top:4px">${e === 'rentado' ? '—' : pesos(rentaDe(l.id))}</div></div></button>`; }).join('') || '<div class="vacio">No hay locales con ese filtro.</div>'}</div>
+  </div>`);
+}
+function fichaRenta(id) {
+  const l = LOC(id), e = estadoDe(id);
+  modal(`<span class="estado ${e}">${ETQ[e]}</span><h3 style="margin-top:8px">${esc(l.nombre)}</h3><p class="sub">${esc(l.zona)}${l.esquina ? ' · local en esquina' : ''}</p>
+    <div class="dos" style="margin:14px 0"><div class="kpi" style="padding:12px"><small>Superficie</small><b style="font-size:20px">${(Math.round(l.m2 * 100) / 100).toLocaleString('es-MX')} m²</b></div><div class="kpi" style="padding:12px"><small>Renta mensual</small><b style="font-size:20px">${pesos(rentaDe(id))}</b></div>
+      <div class="kpi" style="padding:12px"><small>Mantenimiento</small><b style="font-size:20px">${pesos(0)}</b></div><div class="kpi" style="padding:12px"><small>Depósito</small><b style="font-size:20px">2 meses</b></div></div>
+    ${e === 'rentado' ? '<div class="nota-p">Este local ya está rentado.</div>' : `
+    <form class="form" data-f="solicitud" data-id="${id}"><h4>${e === 'apartado' ? 'Anótate en lista de espera' : 'Quiero rentarlo'}</h4>
+      <label>Nombre completo<input name="nombre" required autocomplete="name"></label>
+      <div class="dos"><label>WhatsApp<input name="tel" type="tel" required placeholder="222 123 4567"></label><label>Correo<input name="correo" type="email"></label></div>
+      <label>Giro de tu negocio<input name="giro" required placeholder="Ej. cafetería"></label>
+      <label>Mensaje (opcional)<textarea name="msg" rows="2"></textarea></label>
+      <button class="btn">${e === 'apartado' ? 'Unirme a la lista' : 'Solicitar este local'}</button><p class="sub" style="font-size:12px">Te contactamos por WhatsApp el mismo día hábil.</p></form>`}`);
+}
+
+/* =====================================================================
+   VISTA 2 · Panel del negocio
+   ===================================================================== */
+function nShell(sec, cuerpo) {
+  const n = DB.negocios[DB.sesion];
+  const t = (h, i, txt) => `<a href="#/n/${h}" class="${sec === h ? 'on' : ''}">${ic(i, 19)}${txt}</a>`;
+  return `<div class="papp"><aside class="lateral">
+      <div class="quien">${logoHTML(n, 42)}<div><b>${esc(n.nombre)}</b><small>${esc(LOC(n.id).nombre)} · Panel del negocio</small></div></div>
+      ${t('resumen','rejilla','Resumen')}${t('perfil','editar','Perfil del negocio')}${t('fotos','imagen','Fotos')}${t('productos','lista','Menú y productos')}${t('promos','etiqueta','Promociones')}${t('horario','reloj','Horario')}${t('puntos','estrella','Puntos y cupones')}
+      <div class="esp"></div>
+      <a href="#/c/tienda/${n.id}">${ic('ojo', 19)}Ver como cliente</a><a href="#/n" data-a="salirNegocio">${ic('salir', 19)}Cambiar de negocio</a>
+    </aside><main class="contenido">${cuerpo}</main></div>`;
+}
+function vnEntrar() {
+  const ls = Object.values(DB.negocios).filter(n => estadoDe(n.id) !== 'libre');
+  return `<div style="max-width:760px;margin:0 auto;padding:40px 18px 80px">
+    <div style="display:flex;gap:12px;align-items:center;margin-bottom:24px"><img src="${IMG.logo}" style="height:44px"><div><h1 style="font-size:24px">Panel de negocios</h1><div class="sub">Paseo Lomas</div></div></div>
+    <div class="nota-p" style="margin-bottom:18px">En la versión final cada negocio entra con su correo y contraseña, o con el código de acceso que le da la administración. En esta demo elige un negocio para entrar.</div>
+    <div class="lista-f">${ls.map(n => `<button class="item-f" style="text-align:left;width:100%" data-a="entrarNegocio" data-id="${n.id}">${logoHTML(n, 46)}<div class="inf"><b>${esc(n.nombre)}</b><small>${esc(n.giro)} · ${esc(LOC(n.id).nombre)}${n.prox ? ' · próximamente' : ''}</small></div>${ic('der', 18)}</button>`).join('')}</div>
+  </div>`;
+}
+function completitud(n) {
+  const c = [['Logo', !!n.logo], ['Foto de portada', !!n.portada], ['Descripción', (n.desc || '').length > 30], ['Al menos 3 fotos', n.fotos.length >= 3], ['Menú o productos', n.productos.length >= 3], ['Una promoción activa', n.promos.length > 0], ['Recompensa de puntos', n.recompensas.length > 0], ['WhatsApp', !!n.whatsapp]];
+  return {c, pct:Math.round(c.filter(x => x[1]).length / c.length * 100)};
+}
+function vnResumen() {
+  const n = DB.negocios[DB.sesion], s = DB.stats[n.id], comp = completitud(n);
+  const dias = [...Array(7)].map((_, i) => { const d = new Date(); d.setDate(d.getDate() - 6 + i); return d.toLocaleDateString('es-MX', {weekday:'short'}).replace('.', ''); });
+  const mx = Math.max(...s.visitas, 1), tot = s.visitas.reduce((a, b) => a + b, 0);
+  const avisos = DB.avisos.filter(a => a.para !== 'clientes');
+  return nShell('resumen', `<div class="cabp"><div><h1>Hola, ${esc(n.nombre)}</h1><p class="sub">Así va tu negocio en la app de Paseo Lomas esta semana.</p></div><a class="btn sec" href="#/c/tienda/${n.id}">${ic('ojo', 17)} Ver mi ficha</a></div>
+    ${n.prox ? '<div class="nota-p" style="margin-bottom:16px">Tu negocio aparece como <b>Próximamente</b>. Cuando abras, avísale a la administración para publicarlo con tu menú completo.</div>' : ''}
+    <div class="kpis">
+      <div class="kpi"><small>Visitas a tu ficha (7 días)</small><b>${tot}</b><span>▲ 12 % vs. semana anterior</span></div>
+      <div class="kpi"><small>Clics a WhatsApp</small><b>${s.wa}</b><span>Clientes que te escribieron</span></div>
+      <div class="kpi"><small>Puntos que diste</small><b>${s.pts.toLocaleString('es-MX')}</b><span>Este mes</span></div>
+      <div class="kpi"><small>Cupones canjeados</small><b>${s.cupones}</b><span>Este mes</span></div>
+    </div>
+    <div class="rejilla">
+      <div class="tarjeta"><h3 style="font-size:16px">Visitas a tu ficha</h3><div class="barras">${s.visitas.map((v, i) => `<div><b>${v}</b><i style="height:${Math.round(v / mx * 110)}px"></i>${dias[i]}</div>`).join('')}</div></div>
+      <div class="tarjeta"><h3 style="font-size:16px">Tu perfil está al ${comp.pct} %</h3><div class="progreso"><i style="width:${comp.pct}%"></i></div><p class="sub" style="margin-bottom:6px">Los perfiles completos reciben más visitas.</p>
+        ${comp.c.map(([t, ok]) => `<div class="check ${ok ? 'ok' : ''}"><i>${ok ? ic('check', 13) : ''}</i>${t}</div>`).join('')}</div>
+    </div>
+    <h3 style="font-size:18px;margin:24px 0 10px">Avisos de la administración</h3>
+    ${avisos.map(eventoHTML).join('') || '<p class="sub">Sin avisos.</p>'}`);
+}
+function vnPerfil() {
+  const n = DB.negocios[DB.sesion];
+  const subir = (campo, txt, alto) => `<div class="subir ${n[campo] ? 'con-img' : ''}" style="height:${alto}px;${n[campo] ? `background-image:url(${n[campo]})` : ''}">${ic('imagen', 26)}<span>${n[campo] ? 'Cambiar ' : 'Subir '}${txt}</span><input type="file" accept="image/*" data-file="${campo}"></div>`;
+  return nShell('perfil', `<div class="cabp"><div><h1>Perfil del negocio</h1><p class="sub">Así te ven los clientes en la app.</p></div></div>
+    <div class="rejilla">
+      <form class="form tarjeta" data-f="perfilNegocio">
+        <label>Nombre del negocio<input name="nombre" value="${esc(n.nombre)}" required maxlength="40"></label>
+        <div class="dos"><label>Giro (lo que haces)<input name="giro" value="${esc(n.giro)}" maxlength="40"></label>
+          <label>Categoría<select name="cat">${CATS.map(k => `<option value="${k.id}" ${n.cat === k.id ? 'selected' : ''}>${k.e} ${k.n}</option>`).join('')}</select></label></div>
+        <label>Descripción<textarea name="desc" rows="4" maxlength="400">${esc(n.desc)}</textarea></label>
+        <div class="tres"><label>Color de tu marca<input type="color" name="color" value="${n.color}"></label><label>Ícono<input name="emoji" value="${esc(n.emoji)}" maxlength="4"></label><label>WhatsApp<input name="whatsapp" value="${esc(n.whatsapp)}" inputmode="tel"></label></div>
+        <div class="dos"><label>Teléfono<input name="telefono" value="${esc(n.telefono)}" inputmode="tel"></label><label>Instagram<input name="instagram" value="${esc(n.instagram)}"></label></div>
+        <div class="dos"><label>Facebook<input name="facebook" value="${esc(n.facebook)}"></label><label>Página web<input name="web" value="${esc(n.web)}"></label></div>
+        <button class="btn">Guardar cambios</button>
+      </form>
+      <div class="form">
+        <div class="tarjeta form"><h3 style="font-size:16px">Logo</h3><div style="display:flex;gap:14px;align-items:center">${logoHTML(n, 80)}<div style="flex:1">${subir('logo', 'logo', 90)}</div></div>${n.logo ? '<button class="btn peligro chico" data-a="quitarImg" data-c="logo">Quitar logo</button>' : ''}</div>
+        <div class="tarjeta form"><h3 style="font-size:16px">Foto de portada</h3><p class="sub">Se ve arriba de tu ficha. Usa una foto horizontal de tu local o tus productos.</p>${subir('portada', 'portada', 160)}${n.portada ? '<button class="btn peligro chico" data-a="quitarImg" data-c="portada">Quitar portada</button>' : ''}</div>
+      </div>
+    </div>`);
+}
+function vnFotos() {
+  const n = DB.negocios[DB.sesion];
+  return nShell('fotos', `<div class="cabp"><div><h1>Fotos</h1><p class="sub">Muestra tu local, tus productos y tu equipo. Se ven en la pestaña Fotos de tu ficha.</p></div></div>
+    <div class="fotos">
+      <div class="subir" style="aspect-ratio:1">${ic('mas', 28)}<span>Agregar fotos</span><input type="file" accept="image/*" multiple data-file="fotos"></div>
+      ${n.fotos.map((f, i) => `<div class="foto" style="background-image:url(${f})"><div class="herr">
+        <button data-a="moverFoto" data-i="${i}" data-d="-1" aria-label="Mover a la izquierda" ${i === 0 ? 'disabled' : ''}>${ic('izq', 16)}</button>
+        <button data-a="usarPortada" data-i="${i}" aria-label="Usar como portada" title="Usar como portada">${ic('imagen', 15)}</button>
+        <button data-a="borrarFoto" data-i="${i}" aria-label="Borrar">${ic('basura', 15)}</button>
+        <button data-a="moverFoto" data-i="${i}" data-d="1" aria-label="Mover a la derecha" ${i === n.fotos.length - 1 ? 'disabled' : ''}>${ic('der', 16)}</button></div></div>`).join('')}
+    </div>
+    ${n.fotos.length ? '' : '<p class="vacio">Todavía no hay fotos. Sube al menos 3 para completar tu perfil.</p>'}`);
+}
+function vnProductos() {
+  const n = DB.negocios[DB.sesion];
+  const grupos = [...new Set(n.productos.map(p => p.cat))];
+  return nShell('productos', `<div class="cabp"><div><h1>${n.cat === 'comida' || n.cat === 'cafe' ? 'Menú' : 'Productos y servicios'}</h1><p class="sub">Agrega, edita u oculta lo que vendes. Los cambios se ven al instante en la app.</p></div>
+    <button class="btn" data-a="editarProd">${ic('mas', 17)} Agregar</button></div>
+    ${grupos.map(g => `<div class="gcat">${esc(g)}</div><div class="lista-f">${n.productos.filter(p => p.cat === g).map(p => `
+      <div class="item-f ${p.activo ? '' : 'apagado'}"><div class="pi" style="${fondoNeg(n, p.foto)}">${p.foto ? '' : n.emoji}</div>
+        <div class="inf"><b>${esc(p.nombre)}</b><small>${esc(p.desc || 'Sin descripción')}</small></div><b style="font:700 15px Poppins">${esc(p.precio)}</b>
+        <label class="sw" title="Visible"><input type="checkbox" data-ch="prodActivo" data-id="${p.id}" ${p.activo ? 'checked' : ''}><span></span></label>
+        <button class="ibtn" data-a="editarProd" data-id="${p.id}" aria-label="Editar">${ic('editar', 16)}</button></div>`).join('')}</div>`).join('') || '<div class="vacio tarjeta">Aún no hay productos. Toca «Agregar» para cargar el primero.</div>'}`);
+}
+function formProd(p) {
+  const n = DB.negocios[DB.sesion];
+  const cats = [...new Set(n.productos.map(x => x.cat))];
+  modal(`<h3>${p ? 'Editar' : 'Agregar'} producto</h3>
+    <form class="form" data-f="producto" data-id="${p ? p.id : ''}">
+      <div class="subir ${p && p.foto ? 'con-img' : ''}" id="prodFoto" style="height:140px;${p && p.foto ? `background-image:url(${p.foto})` : ''}">${ic('imagen', 24)}<span>${p && p.foto ? 'Cambiar foto' : 'Foto (opcional)'}</span><input type="file" accept="image/*" data-file="prodFoto"></div>
+      <input type="hidden" name="foto" value="${p ? esc(p.foto) : ''}">
+      <label>Nombre<input name="nombre" required value="${p ? esc(p.nombre) : ''}" maxlength="50"></label>
+      <div class="dos"><label>Precio<input name="precio" required value="${p ? esc(p.precio) : ''}" placeholder="$0"></label>
+        <label>Sección<input name="cat" list="cats" required value="${p ? esc(p.cat) : (cats[0] || 'General')}"><datalist id="cats">${cats.map(c => `<option value="${esc(c)}">`).join('')}</datalist></label></div>
+      <label>Descripción<textarea name="desc" rows="2" maxlength="140">${p ? esc(p.desc) : ''}</textarea></label>
+      <div style="display:flex;gap:10px;justify-content:space-between">${p ? `<button type="button" class="btn peligro" data-a="borrarProd" data-id="${p.id}">${ic('basura', 16)} Borrar</button>` : '<span></span>'}<button class="btn">Guardar</button></div>
+    </form>`);
+}
+function vnPromos() {
+  const n = DB.negocios[DB.sesion];
+  return nShell('promos', `<div class="cabp"><div><h1>Promociones</h1><p class="sub">Las promociones destacadas salen en el inicio de la app para todos los clientes.</p></div><button class="btn" data-a="editarPromo">${ic('mas', 17)} Nueva promoción</button></div>
+    <div class="lista-f">${n.promos.map(p => `<div class="item-f"><div class="pi" style="${fondoNeg(n, p.img)}">${p.img ? '' : n.emoji}</div>
+      <div class="inf"><b>${esc(p.titulo)}</b><small>${esc(p.desc)}</small><small>Del ${fFecha(p.desde)} al ${fFecha(p.hasta)}${p.destacada ? ' · <b style="color:var(--libre)">Destacada en inicio</b>' : ''}</small></div>
+      <button class="ibtn" data-a="editarPromo" data-id="${p.id}" aria-label="Editar">${ic('editar', 16)}</button></div>`).join('') || '<div class="vacio tarjeta">Sin promociones. Crea una para aparecer en el inicio de la app.</div>'}</div>`);
+}
+function formPromo(p) {
+  const hoy = new Date().toISOString().slice(0, 10), mes = new Date(Date.now() + 30 * 864e5).toISOString().slice(0, 10);
+  modal(`<h3>${p ? 'Editar' : 'Nueva'} promoción</h3>
+    <form class="form" data-f="promo" data-id="${p ? p.id : ''}">
+      <div class="subir ${p && p.img ? 'con-img' : ''}" id="promoImg" style="height:140px;${p && p.img ? `background-image:url(${p.img})` : ''}">${ic('imagen', 24)}<span>Imagen (opcional)</span><input type="file" accept="image/*" data-file="promoImg"></div>
+      <input type="hidden" name="img" value="${p ? esc(p.img) : ''}">
+      <label>Título<input name="titulo" required maxlength="40" value="${p ? esc(p.titulo) : ''}" placeholder="Ej. 2×1 en cafés"></label>
+      <label>Descripción<textarea name="desc" rows="2" maxlength="120" placeholder="Condiciones, días, horarios">${p ? esc(p.desc) : ''}</textarea></label>
+      <div class="dos"><label>Desde<input type="date" name="desde" required value="${p ? p.desde : hoy}"></label><label>Hasta<input type="date" name="hasta" required value="${p ? p.hasta : mes}"></label></div>
+      <label style="display:flex;gap:10px;align-items:center"><input type="checkbox" name="destacada" ${!p || p.destacada ? 'checked' : ''}> Destacar en el inicio de la app</label>
+      <div style="display:flex;gap:10px;justify-content:space-between">${p ? `<button type="button" class="btn peligro" data-a="borrarPromo" data-id="${p.id}">${ic('basura', 16)} Borrar</button>` : '<span></span>'}<button class="btn">Guardar</button></div>
+    </form>`);
+}
+function vnHorario() {
+  const n = DB.negocios[DB.sesion];
+  return nShell('horario', `<div class="cabp"><div><h1>Horario</h1><p class="sub">La app muestra «Abierto» o «Cerrado» según este horario.</p></div></div>
+    <form class="tarjeta" data-f="horario">
+      ${['lun','mar','mie','jue','vie','sab','dom'].map(d => { const h = n.horario[d]; return `<div class="hor"><b>${DIAS_N[d]}</b>
+        <label style="display:flex;gap:8px;align-items:center;font-weight:500"><input type="checkbox" name="${d}_abre" ${h.cerrado ? '' : 'checked'}> Abre</label>
+        <input type="time" name="${d}_a" value="${h.a}"><input type="time" name="${d}_c" value="${h.c === '24:00' ? '23:59' : h.c}"></div>`; }).join('')}
+      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap"><button class="btn">Guardar horario</button><button type="button" class="btn sec" data-a="copiarLunes">Copiar el lunes a todos los días</button></div>
+    </form>`);
+}
+function vnPuntos() {
+  const n = DB.negocios[DB.sesion], cfg = DB.config;
+  const movs = DB.movs.filter(m => m.n === n.id).slice(-12).reverse();
+  return nShell('puntos', `<div class="cabp"><div><h1>Puntos y cupones</h1><p class="sub">${esc(cfg.programa)}: el cliente gana 1 punto por cada $${cfg.pesosPorPunto} y los usa en cualquier negocio de la plaza.</p></div></div>
+    <div class="rejilla">
+      <form class="tarjeta form" data-f="darPuntos"><h3 style="font-size:17px">${ic('estrella', 18)} Dar puntos a un cliente</h3>
+        <label>Código del cliente<input name="cod" required placeholder="PL-0000" style="text-transform:uppercase"></label>
+        <label>Monto de la compra<input name="monto" type="number" min="1" step="1" required placeholder="$"></label>
+        <p class="sub" id="calcPts">El cliente recibirá 0 puntos.</p>
+        <button class="btn">Dar puntos</button><p class="sub" style="font-size:12px">En la versión final el código se escanea con la cámara. Para probar usa <b>${DB.cliente.codigo}</b>.</p></form>
+      <form class="tarjeta form" data-f="validarCupon"><h3 style="font-size:17px">${ic('regalo', 18)} Validar un cupón</h3>
+        <label>Código del cupón<input name="cod" required placeholder="Ej. CV-7X2K" style="text-transform:uppercase"></label>
+        <button class="btn">Validar y marcar como usado</button>
+        <p class="sub" style="font-size:12px">Los cupones se generan cuando el cliente canjea una de tus recompensas en la app.</p></form>
+    </div>
+    <div class="cabp" style="margin-top:26px"><h2 style="font-size:20px">Tus recompensas</h2><button class="btn sec" data-a="editarRecomp">${ic('mas', 17)} Nueva recompensa</button></div>
+    <div class="lista-f">${n.recompensas.map(r => `<div class="item-f"><div class="pi" style="background:#FBF3DF;color:#8a5f08;font:700 16px Poppins">${r.puntos}</div><div class="inf"><b>${esc(r.titulo)}</b><small>${r.puntos} puntos${r.desc ? ' · ' + esc(r.desc) : ''}</small></div>
+      <button class="ibtn" data-a="editarRecomp" data-id="${r.id}" aria-label="Editar">${ic('editar', 16)}</button></div>`).join('') || '<div class="vacio tarjeta">Aún no tienes recompensas.</div>'}</div>
+    <h2 style="font-size:20px;margin:26px 0 10px">Movimientos recientes</h2>
+    <div class="tabla-c"><table class="tabla"><thead><tr><th>Fecha</th><th>Movimiento</th><th>Detalle</th></tr></thead><tbody>
+      ${movs.map(m => `<tr><td>${esc(m.f)}</td><td>${esc(m.t)}</td><td>${esc(m.d)}</td></tr>`).join('') || '<tr><td colspan="3" class="vacio">Aún no hay movimientos en esta demo.</td></tr>'}</tbody></table></div>`);
+}
+function formRecomp(r) {
+  modal(`<h3>${r ? 'Editar' : 'Nueva'} recompensa</h3><form class="form" data-f="recomp" data-id="${r ? r.id : ''}">
+    <label>Recompensa<input name="titulo" required maxlength="40" value="${r ? esc(r.titulo) : ''}" placeholder="Ej. Café gratis"></label>
+    <label>Puntos necesarios<input name="puntos" type="number" min="1" required value="${r ? r.puntos : 100}"></label>
+    <label>Detalle (opcional)<input name="desc" maxlength="80" value="${r ? esc(r.desc) : ''}"></label>
+    <div style="display:flex;gap:10px;justify-content:space-between">${r ? `<button type="button" class="btn peligro" data-a="borrarRecomp" data-id="${r.id}">${ic('basura', 16)} Borrar</button>` : '<span></span>'}<button class="btn">Guardar</button></div></form>`);
+}
+
+/* =====================================================================
+   VISTA 3 · Administración de la plaza
+   ===================================================================== */
+const SA = {filtro:'todos', sel:null};
+function aShell(sec, cuerpo) {
+  const nuevas = DB.solicitudes.filter(s => !s.vista).length;
+  const t = (h, i, txt, b) => `<a href="#/a/${h}" class="${sec === h ? 'on' : ''}">${ic(i, 19)}${txt}${b ? `<span class="estado prox" style="margin-left:auto">${b}</span>` : ''}</a>`;
+  return `<div class="papp"><aside class="lateral">
+      <div class="quien"><img src="${IMG.logo}" style="height:40px;filter:brightness(0) invert(1)"><div><b>Paseo Lomas</b><small>Administración</small></div></div>
+      ${t('resumen','rejilla','Resumen')}${t('locales','mapa','Locales y rentas', nuevas)}${t('negocios','bolsa','Negocios')}${t('avisos','megafono','Avisos y eventos')}${t('puntos','estrella','Programa de puntos')}${t('ajustes','ajustes','Ajustes')}
+      <div class="esp"></div><a href="#/c/inicio">${ic('ojo', 19)}Ver app de clientes</a>
+    </aside><main class="contenido">${cuerpo}</main></div>`;
+}
+function vaResumen() {
+  const cnt = e => LOCALES.filter(l => estadoDe(l.id) === e).length;
+  const neg = negociosVisibles(), pts = Object.values(DB.stats).reduce((a, s) => a + s.pts, 0);
+  const ocup = Math.round((cnt('rentado') + cnt('apartado')) / LOCALES.length * 100);
+  const peor = Object.values(DB.negocios).filter(n => !n.prox && estadoDe(n.id) !== 'libre').map(n => [n, completitud(n).pct]).sort((a, b) => a[1] - b[1]).slice(0, 5);
+  return aShell('resumen', `<div class="cabp"><div><h1>Resumen de la plaza</h1><p class="sub">Paseo Lomas · ${LOCALES.length} espacios rentables</p></div></div>
+    <div class="kpis">
+      <div class="kpi"><small>Ocupación</small><b>${ocup} %</b><span>${cnt('rentado')} rentados · ${cnt('apartado')} apartados</span></div>
+      <div class="kpi"><small>Locales disponibles</small><b>${cnt('libre')}</b><span style="color:var(--gris)">Listos para rentar</span></div>
+      <div class="kpi"><small>Solicitudes de renta</small><b>${DB.solicitudes.length}</b><span>${DB.solicitudes.filter(s => !s.vista).length} sin revisar</span></div>
+      <div class="kpi"><small>Clientes en la app</small><b>${DB.config.clientes.toLocaleString('es-MX')}</b><span>${pts.toLocaleString('es-MX')} puntos dados este mes</span></div>
+    </div>
+    <div class="rejilla">
+      <div class="tarjeta"><h3 style="font-size:16px;margin-bottom:10px">Plano de ocupación</h3><div class="mapa" style="border:0">${mapaSVG(l => ({f:{libre:'#2E9E5B', apartado:'#D79A1E', rentado:'#9A9C93'}[estadoDe(l.id)], o:.6}), 'irLocal')}</div></div>
+      <div class="tarjeta"><h3 style="font-size:16px">Perfiles por completar</h3><p class="sub" style="margin-bottom:8px">Negocios con menos información en la app.</p>
+        ${peor.map(([n, p]) => `<div class="check" style="justify-content:space-between">${logoHTML(n, 30)}<span style="flex:1">${esc(n.nombre)}</span><b>${p} %</b></div>`).join('')}
+        <a class="btn sec chico" href="#/a/negocios" style="margin-top:10px">Ver negocios</a></div>
+    </div>`);
+}
+function vaLocales() {
+  const f = SA.filtro;
+  const ls = LOCALES.filter(l => f === 'todos' || estadoDe(l.id) === f);
+  DB.solicitudes.forEach(s => s.vista = true); guardar();
+  return aShell('locales', `<div class="cabp"><div><h1>Locales y rentas</h1><p class="sub">Toca un local para cambiar su estado o su renta.</p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">${[['todos','Todos'],['libre','Disponibles'],['apartado','Apartados'],['rentado','Rentados']].map(([k, t]) => `<button class="chip ${f === k ? 'on' : ''}" data-a="filtroA" data-f="${k}">${t}</button>`).join('')}</div></div>
+    <div class="mapa">${mapaSVG(l => { const e = estadoDe(l.id); return {f:{libre:'#2E9E5B', apartado:'#D79A1E', rentado:'#9A9C93'}[e], o:(f === 'todos' || f === e) ? (e === 'rentado' ? .45 : .6) : .08, t:`${l.nombre} · ${ETQ[e]}`}; }, 'editarLocal', SA.sel)}
+      <div class="leyenda"><span><i class="punto" style="background:var(--libre)"></i>Disponible</span><span><i class="punto" style="background:var(--apart)"></i>Apartado</span><span><i class="punto" style="background:var(--rent)"></i>Rentado</span></div></div>
+    <div class="tabla-c" style="margin-top:16px"><table class="tabla"><thead><tr><th>Local</th><th>Zona</th><th>m²</th><th>Estado</th><th>Negocio</th><th>Renta</th><th></th></tr></thead><tbody>
+      ${ls.map(l => { const e = estadoDe(l.id), n = DB.negocios[l.id]; return `<tr><td><b>${esc(l.nombre)}</b></td><td>${esc(l.zona)}</td><td>${l.m2}</td><td><span class="estado ${e}">${ETQ[e]}</span></td><td>${n ? esc(n.nombre) : '—'}</td><td>${pesos(rentaDe(l.id))}</td><td><button class="btn suave chico" data-a="editarLocal" data-id="${l.id}">Editar</button></td></tr>`; }).join('')}</tbody></table></div>
+    <h2 style="font-size:20px;margin:26px 0 10px">Solicitudes de renta</h2>
+    <div class="tabla-c"><table class="tabla"><thead><tr><th>Fecha</th><th>Local</th><th>Nombre</th><th>Contacto</th><th>Giro</th><th>Mensaje</th></tr></thead><tbody>
+      ${DB.solicitudes.slice().reverse().map(s => `<tr><td>${esc(s.fecha)}</td><td>${esc(s.local)}</td><td>${esc(s.nombre)}</td><td>${esc(s.tel)}<br><span class="sub">${esc(s.correo)}</span></td><td>${esc(s.giro)}</td><td>${esc(s.msg)}</td></tr>`).join('') || '<tr><td colspan="6" class="vacio">Todavía no hay solicitudes. Llegan desde «Rentar un local» en la app de clientes.</td></tr>'}</tbody></table></div>`);
+}
+function formLocal(id) {
+  const l = LOC(id), e = estadoDe(id), n = DB.negocios[id];
+  modal(`<h3>${esc(l.nombre)}</h3><p class="sub" style="margin:-6px 0 14px">${esc(l.zona)} · ${l.m2} m²</p>
+    <form class="form" data-f="local" data-id="${id}">
+      <div class="dos"><label>Estado<select name="estado">${Object.entries(ETQ).map(([k, v]) => `<option value="${k}" ${k === e ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
+        <label>Renta mensual<input name="renta" type="number" min="0" step="100" value="${rentaDe(id) || ''}" placeholder="0000"></label></div>
+      <button class="btn">Guardar</button></form>
+    <div style="border-top:1px solid var(--linea);margin-top:18px;padding-top:16px">
+      ${n ? `<div class="item-f">${logoHTML(n, 40)}<div class="inf"><b>${esc(n.nombre)}</b><small>${esc(n.giro)}${n.prox ? ' · próximamente' : ''}</small></div><button class="btn suave chico" data-a="entrarNegocio" data-id="${id}">Entrar como negocio</button></div>`
+        : (e !== 'libre' ? `<p class="sub" style="margin-bottom:10px">Este local no tiene un negocio dado de alta en la app.</p><button class="btn sec" data-a="altaNegocio" data-id="${id}">${ic('mas', 16)} Dar de alta negocio</button>` : '<p class="sub">Cuando se rente, podrás dar de alta al negocio para que cargue su información.</p>')}
+    </div>`);
+}
+function vaNegocios() {
+  const ls = Object.values(DB.negocios).filter(n => estadoDe(n.id) !== 'libre');
+  return aShell('negocios', `<div class="cabp"><div><h1>Negocios</h1><p class="sub">Cada negocio administra su ficha. Aquí decides quién se publica en la app.</p></div></div>
+    <div class="tabla-c"><table class="tabla"><thead><tr><th>Negocio</th><th>Local</th><th>Categoría</th><th>Perfil</th><th>Código de acceso</th><th>Publicado</th><th></th></tr></thead><tbody>
+      ${ls.map(n => { const p = completitud(n).pct; return `<tr><td><div style="display:flex;gap:10px;align-items:center">${logoHTML(n, 34)}<div><b>${esc(n.nombre)}</b><div class="sub">${esc(n.giro)}</div></div></div></td><td>${esc(LOC(n.id).nombre)}</td><td>${CAT(n.cat).e} ${CAT(n.cat).n}</td>
+        <td style="min-width:110px"><div class="progreso" style="margin:0 0 3px"><i style="width:${p}%"></i></div><small class="sub">${p} %</small></td><td><code>${esc(n.codigo)}</code></td>
+        <td><label class="sw"><input type="checkbox" data-ch="publicar" data-id="${n.id}" ${n.publicado ? 'checked' : ''}><span></span></label></td>
+        <td style="white-space:nowrap"><select data-ch="estadoNeg" data-id="${n.id}" style="width:auto;padding:6px 8px;font-size:13px"><option value="abierto" ${n.prox ? '' : 'selected'}>Abierto</option><option value="prox" ${n.prox ? 'selected' : ''}>Próximamente</option></select>
+        <button class="btn suave chico" data-a="entrarNegocio" data-id="${n.id}">Entrar</button></td></tr>`; }).join('')}</tbody></table></div>
+    <p class="sub" style="margin-top:12px">Para dar de alta un negocio nuevo, marca su local como rentado en «Locales y rentas» y toca «Dar de alta negocio».</p>`);
+}
+function vaAvisos() {
+  const para = {todos:'Clientes y negocios', clientes:'Solo clientes', negocios:'Solo negocios'};
+  return aShell('avisos', `<div class="cabp"><div><h1>Avisos y eventos</h1><p class="sub">Los eventos salen en el inicio de la app. Los avisos a negocios salen en su panel.</p></div><button class="btn" data-a="editarAviso">${ic('mas', 17)} Nuevo</button></div>
+    <div class="lista-f">${DB.avisos.slice().sort((a, b) => a.fecha.localeCompare(b.fecha)).map(a => `<div class="item-f"><div class="pi" style="background:var(--marca-suave);color:var(--marca-osc)">${ic(a.tipo === 'evento' ? 'calendario' : 'megafono', 22)}</div>
+      <div class="inf"><b>${esc(a.titulo)}</b><small>${fFecha(a.fecha)} · ${a.tipo === 'evento' ? 'Evento' : 'Aviso'} · ${para[a.para]}</small><small>${esc(a.texto)}</small></div>
+      <button class="ibtn" data-a="editarAviso" data-id="${a.id}" aria-label="Editar">${ic('editar', 16)}</button></div>`).join('') || '<div class="vacio tarjeta">Sin avisos.</div>'}</div>`);
+}
+function formAviso(a) {
+  modal(`<h3>${a ? 'Editar' : 'Nuevo'} aviso o evento</h3><form class="form" data-f="aviso" data-id="${a ? a.id : ''}">
+    <div class="dos"><label>Tipo<select name="tipo"><option value="evento" ${a && a.tipo === 'aviso' ? '' : 'selected'}>Evento</option><option value="aviso" ${a && a.tipo === 'aviso' ? 'selected' : ''}>Aviso</option></select></label>
+      <label>Fecha<input type="date" name="fecha" required value="${a ? a.fecha : new Date().toISOString().slice(0, 10)}"></label></div>
+    <label>Título<input name="titulo" required maxlength="60" value="${a ? esc(a.titulo) : ''}"></label>
+    <label>Texto<textarea name="texto" rows="3" maxlength="200">${a ? esc(a.texto) : ''}</textarea></label>
+    <label>Para quién<select name="para">${[['todos','Clientes y negocios'],['clientes','Solo clientes'],['negocios','Solo negocios']].map(([k, t]) => `<option value="${k}" ${a && a.para === k ? 'selected' : ''}>${t}</option>`).join('')}</select></label>
+    <div style="display:flex;gap:10px;justify-content:space-between">${a ? `<button type="button" class="btn peligro" data-a="borrarAviso" data-id="${a.id}">${ic('basura', 16)} Borrar</button>` : '<span></span>'}<button class="btn">Publicar</button></div></form>`);
+}
+function vaPuntos() {
+  const cfg = DB.config, tot = Object.values(DB.stats).reduce((a, s) => a + s.pts, 0), cup = Object.values(DB.stats).reduce((a, s) => a + s.cupones, 0);
+  const top = Object.values(DB.negocios).filter(n => !n.prox).map(n => [n, DB.stats[n.id].pts]).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  return aShell('puntos', `<div class="cabp"><div><h1>Programa de puntos</h1><p class="sub">Un solo programa para toda la plaza: los clientes ganan en un negocio y canjean en cualquiera.</p></div></div>
+    <div class="kpis"><div class="kpi"><small>Puntos dados este mes</small><b>${tot.toLocaleString('es-MX')}</b></div><div class="kpi"><small>Cupones canjeados</small><b>${cup}</b></div>
+      <div class="kpi"><small>Clientes registrados</small><b>${cfg.clientes.toLocaleString('es-MX')}</b></div><div class="kpi"><small>Ventas aproximadas</small><b>${pesos(tot * cfg.pesosPorPunto)}</b><span>Según puntos dados</span></div></div>
+    <div class="rejilla">
+      <form class="tarjeta form" data-f="config"><h3 style="font-size:16px">Reglas del programa</h3>
+        <label>Nombre del programa<input name="programa" value="${esc(cfg.programa)}" required></label>
+        <div class="dos"><label>Pesos por cada punto<input name="pesosPorPunto" type="number" min="1" value="${cfg.pesosPorPunto}"></label><label>Bono de bienvenida<input name="bono" type="number" min="0" value="${cfg.bono}"></label></div>
+        <div class="tres">${cfg.niveles.map(([n, p], i) => `<label>Nivel ${esc(n)} desde<input name="nivel${i}" type="number" min="0" value="${p}" ${i === 0 ? 'readonly' : ''}></label>`).join('')}</div>
+        <button class="btn">Guardar reglas</button></form>
+      <div class="tarjeta"><h3 style="font-size:16px;margin-bottom:8px">Negocios que más puntos dan</h3>
+        ${top.map(([n, p]) => `<div class="check" style="justify-content:space-between">${logoHTML(n, 30)}<span style="flex:1">${esc(n.nombre)}</span><b>${p.toLocaleString('es-MX')}</b></div>`).join('')}</div>
+    </div>`);
+}
+function vaAjustes() {
+  return aShell('ajustes', `<div class="cabp"><div><h1>Ajustes</h1></div></div>
+    <div class="tarjeta form" style="max-width:560px"><h3 style="font-size:16px">Demo</h3><p class="sub">Todo lo que se cambia en esta demo se guarda solo en este navegador. Puedes volver a los datos de ejemplo cuando quieras.</p>
+      <button class="btn peligro" data-a="reiniciar">Reiniciar demo</button></div>
+    <div class="tarjeta" style="max-width:560px;margin-top:14px"><h3 style="font-size:16px;margin-bottom:6px">En la versión final</h3>
+      <ul class="sub" style="padding-left:18px;display:grid;gap:4px"><li>Acceso con usuario y contraseña para la administración y para cada negocio.</li><li>Base de datos en la nube y fotos en almacenamiento seguro.</li><li>Escaneo del QR de puntos con la cámara del celular.</li><li>Notificaciones a los clientes de promociones y eventos.</li><li>Las solicitudes de renta llegan a WhatsApp y al CRM.</li></ul></div>`);
+}
+
+/* =====================================================================
+   Enrutador
+   ===================================================================== */
+let despues = [];
+function render() {
+  const h = location.hash.replace(/^#\/?/, '').split('/');
+  const [rol, sec, id] = h;
+  despues = [];
+  let html;
+  document.body.classList.toggle('en-cliente', rol === 'c');
+  if (rol === 'c') {
+    html = ({inicio:vcInicio, tiendas:vcTiendas, tienda:() => vcTienda(id), mapa:vcMapa, puntos:vcPuntos, perfil:vcPerfil, rentar:() => vcRentar(id)}[sec] || vcInicio)();
+    if (sec === 'puntos') despues.push(pintarQR);
+    if (sec === 'rentar' && id) despues.push(() => fichaRenta(id));
+    if (sec === 'mapa' && ST.selMapa) despues.push(centrarMapa);
+  } else if (rol === 'n') {
+    if (!DB.sesion || !DB.negocios[DB.sesion] || !sec) html = vnEntrar();
+    else html = ({resumen:vnResumen, perfil:vnPerfil, fotos:vnFotos, productos:vnProductos, promos:vnPromos, horario:vnHorario, puntos:vnPuntos}[sec] || vnResumen)();
+    if (sec === 'puntos') despues.push(() => { const f = $('[data-f=darPuntos]'); f && f.monto.addEventListener('input', () => { $('#calcPts').textContent = `El cliente recibirá ${Math.floor((+f.monto.value || 0) / DB.config.pesosPorPunto)} puntos.`; }); });
+  } else if (rol === 'a') {
+    html = ({resumen:vaResumen, locales:vaLocales, negocios:vaNegocios, avisos:vaAvisos, puntos:vaPuntos, ajustes:vaAjustes}[sec] || vaResumen)();
+  } else html = vInicio();
+  $('#app').innerHTML = (rol ? `<div class="aviso-demo"><span>Demo · datos de ejemplo</span><a href="#/">${ic('cambiar', 13)} Cambiar vista</a></div>` : '') + html;
+  despues.forEach(f => f());
+}
+function pintarQR() {
+  const el = $('#qr'); if (!el) return;
+  if (window.QRCode) new QRCode(el, {text:'PASEOLOMAS:' + DB.cliente.codigo, width:190, height:190, colorDark:'#1E231D', colorLight:'#ffffff'});
+  else el.innerHTML = `<div class="vacio">${ic('qr', 60)}</div>`;
+}
+function centrarMapa() {
+  const d = $('#desliza'), p = $(`polygon[data-id="${ST.selMapa}"]`); if (!d || !p) return;
+  const r = p.getBoundingClientRect(), rd = d.getBoundingClientRect();
+  d.scrollLeft += r.left + r.width / 2 - rd.left - rd.width / 2;
+}
+const ir = h => { if (location.hash === h) render(); else location.hash = h; };
+addEventListener('hashchange', () => { if (!ST.keepTab) ST.tab = 'menu'; ST.keepTab = false; cerrarModal(); render(); scrollTo(0, 0); });
+
+/* =====================================================================
+   Acciones
+   ===================================================================== */
+const A = {
+  cerrarModal,
+  ir: el => ir(el.dataset.h),
+  verAvisos: () => modal(`<h3>Avisos de Paseo Lomas</h3>${DB.avisos.filter(a => a.para !== 'negocios').map(eventoHTML).join('') || '<p class="sub">Sin avisos.</p>'}`),
+  verCat: el => { ST.cat = el.dataset.cat; ST.q = ''; ir('#/c/tiendas'); },
+  tab: el => { ST.tab = el.dataset.t; render(); },
+  tabRecomp: () => { ST.tab = 'recomp'; ST.keepTab = true; },
+  fav: el => { const f = DB.cliente.favoritos, id = el.dataset.id; const i = f.indexOf(id); i < 0 ? f.push(id) : f.splice(i, 1); guardar(); toast(i < 0 ? 'Guardado en tus favoritos' : 'Quitado de favoritos'); render(); },
+  whats: el => { DB.stats[el.dataset.id].wa++; guardar(); toast('En la versión final abre WhatsApp con el negocio.'); },
+  llamar: () => toast('En la versión final inicia la llamada al negocio.'),
+  ubicar: el => { ST.selMapa = el.dataset.id; ir('#/c/mapa'); },
+  verFoto: el => modal(`<img src="${el.dataset.src}" style="width:100%;border-radius:14px;margin-top:20px">`),
+  canjear: el => {
+    const n = DB.negocios[el.dataset.n], r = n.recompensas.find(x => x.id === el.dataset.r), c = DB.cliente;
+    if (c.puntos < r.puntos) return toast('Aún no te alcanzan los puntos.');
+    modal(`<h3>¿Canjear ${esc(r.titulo)}?</h3><p class="sub">Se descontarán <b>${r.puntos} puntos</b>. Te quedarán ${c.puntos - r.puntos}.</p>
+      <div style="display:flex;gap:10px;margin-top:18px"><button class="btn sec" data-a="cerrarModal">Cancelar</button><button class="btn" data-a="confirmarCanje" data-n="${n.id}" data-r="${r.id}">Canjear</button></div>`);
+  },
+  confirmarCanje: el => {
+    const n = DB.negocios[el.dataset.n], r = n.recompensas.find(x => x.id === el.dataset.r), c = DB.cliente;
+    const k = {codigo:(n.nombre.match(/\b\w/g) || ['P']).slice(0, 2).join('').toUpperCase() + '-' + codigo(), titulo:r.titulo, negocio:n.nombre, n:n.id, puntos:r.puntos, usado:false};
+    c.puntos -= r.puntos; c.cupones.unshift(k); c.historial.unshift({f:new Date().toISOString().slice(0, 10), t:n.nombre, d:'Canje: ' + r.titulo, p:-r.puntos}); guardar();
+    modal(`<div style="text-align:center"><div style="font-size:52px">🎉</div><h3 style="padding:0">¡Listo! Tu cupón</h3><div class="cupon" style="justify-content:center;margin:14px 0"><div class="cod" style="font-size:24px">${k.codigo}</div></div>
+      <p class="sub">Muéstralo en ${esc(n.nombre)} para recibir: <b>${esc(r.titulo)}</b>. También queda guardado en «Mis puntos».</p><button class="btn ancho" style="margin-top:16px" data-a="cerrarModal">Entendido</button></div>`);
+    $('#velo').addEventListener('click', render, {once:true});
+  },
+  selMapa: el => { ST.selMapa = el.dataset.id; render(); },
+  rentarLocal: el => fichaRenta(el.dataset.id),
+  filtroRenta: el => { ST.filtroRenta = el.dataset.f; render(); },
+  // negocio
+  entrarNegocio: el => { DB.sesion = el.dataset.id; guardar(); ir('#/n/resumen'); },
+  salirNegocio: () => { DB.sesion = null; guardar(); },
+  quitarImg: el => { DB.negocios[DB.sesion][el.dataset.c] = ''; guardar(); render(); },
+  moverFoto: el => { const f = DB.negocios[DB.sesion].fotos, i = +el.dataset.i, j = i + +el.dataset.d; if (j < 0 || j >= f.length) return; [f[i], f[j]] = [f[j], f[i]]; guardar(); render(); },
+  borrarFoto: el => { DB.negocios[DB.sesion].fotos.splice(+el.dataset.i, 1); guardar(); render(); },
+  usarPortada: el => { const n = DB.negocios[DB.sesion]; n.portada = n.fotos[+el.dataset.i]; guardar(); toast('Foto puesta como portada'); },
+  editarProd: el => formProd(el.dataset.id && DB.negocios[DB.sesion].productos.find(p => p.id === el.dataset.id)),
+  borrarProd: el => { const n = DB.negocios[DB.sesion]; n.productos = n.productos.filter(p => p.id !== el.dataset.id); guardar(); cerrarModal(); render(); toast('Producto borrado'); },
+  editarPromo: el => formPromo(el.dataset.id && DB.negocios[DB.sesion].promos.find(p => p.id === el.dataset.id)),
+  borrarPromo: el => { const n = DB.negocios[DB.sesion]; n.promos = n.promos.filter(p => p.id !== el.dataset.id); guardar(); cerrarModal(); render(); toast('Promoción borrada'); },
+  editarRecomp: el => formRecomp(el.dataset.id && DB.negocios[DB.sesion].recompensas.find(r => r.id === el.dataset.id)),
+  borrarRecomp: el => { const n = DB.negocios[DB.sesion]; n.recompensas = n.recompensas.filter(r => r.id !== el.dataset.id); guardar(); cerrarModal(); render(); },
+  copiarLunes: () => { const f = $('[data-f=horario]'); ['mar','mie','jue','vie','sab','dom'].forEach(d => { f[d + '_abre'].checked = f.lun_abre.checked; f[d + '_a'].value = f.lun_a.value; f[d + '_c'].value = f.lun_c.value; }); toast('Copiado. Toca «Guardar horario».'); },
+  // administración
+  filtroA: el => { SA.filtro = el.dataset.f; render(); },
+  editarLocal: el => { SA.sel = el.dataset.id; formLocal(el.dataset.id); },
+  irLocal: el => { SA.sel = el.dataset.id; ir('#/a/locales'); setTimeout(() => formLocal(el.dataset.id), 50); },
+  altaNegocio: el => {
+    const id = el.dataset.id;
+    modal(`<h3>Dar de alta negocio · ${esc(LOC(id).nombre)}</h3><form class="form" data-f="alta" data-id="${id}">
+      <label>Nombre del negocio<input name="nombre" required maxlength="40"></label>
+      <div class="dos"><label>Giro<input name="giro" required placeholder="Ej. cafetería"></label><label>Categoría<select name="cat">${CATS.map(k => `<option value="${k.id}">${k.e} ${k.n}</option>`).join('')}</select></label></div>
+      <label>WhatsApp del encargado<input name="whatsapp" inputmode="tel"></label>
+      <button class="btn">Crear y generar código de acceso</button></form>`);
+  },
+  editarAviso: el => formAviso(el.dataset.id && DB.avisos.find(a => a.id === el.dataset.id)),
+  borrarAviso: el => { DB.avisos = DB.avisos.filter(a => a.id !== el.dataset.id); guardar(); cerrarModal(); render(); },
+  reiniciar: () => { if (confirm('¿Volver todos los datos de la demo a como estaban al inicio?')) { DB = semilla(); guardar(); toast('Demo reiniciada'); render(); } },
+};
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-a]'); if (!el) return;
+  const f = A[el.dataset.a]; if (!f) return;
+  if (el.tagName !== 'A' || el.dataset.a !== 'tabRecomp') e.preventDefault();
+  if (el.dataset.a === 'salirNegocio') { f(el); ir('#/n'); return; }
+  f(el, e);
+});
+
+/* ---------------- Formularios ---------------- */
+const datos = f => Object.fromEntries(new FormData(f));
+const F = {
+  perfilCliente: (f, d) => { Object.assign(DB.cliente, {nombre:d.nombre.trim(), correo:d.correo.trim()}); guardar(); toast('Perfil guardado'); render(); },
+  solicitud: (f, d) => {
+    const l = LOC(f.dataset.id);
+    DB.solicitudes.push({...d, local:l.nombre, fecha:new Date().toLocaleString('es-MX', {dateStyle:'short', timeStyle:'short'}), vista:false}); guardar();
+    modal(`<div style="text-align:center"><div style="font-size:48px">✅</div><h3 style="padding:0">¡Recibimos tu solicitud!</h3><p class="sub">Para el ${esc(l.nombre)}. Te escribimos por WhatsApp hoy mismo, ${esc(d.nombre.split(' ')[0])}.</p><button class="btn ancho" style="margin-top:16px" data-a="cerrarModal">Listo</button></div>`);
+  },
+  perfilNegocio: (f, d) => { const n = DB.negocios[DB.sesion]; ['nombre','giro','cat','desc','color','emoji','whatsapp','telefono','instagram','facebook','web'].forEach(k => n[k] = (d[k] || '').trim()); if (!n.emoji) n.emoji = CAT(n.cat).e; guardar(); toast('Perfil guardado. Ya se ve en la app.'); render(); },
+  producto: (f, d) => {
+    const n = DB.negocios[DB.sesion], id = f.dataset.id;
+    const p = {nombre:d.nombre.trim(), precio:d.precio.trim(), cat:d.cat.trim() || 'General', desc:d.desc.trim(), foto:d.foto};
+    if (id) Object.assign(n.productos.find(x => x.id === id), p); else n.productos.push({id:'p' + Date.now(), activo:true, ...p});
+    guardar(); cerrarModal(); render(); toast('Producto guardado');
+  },
+  promo: (f, d) => {
+    const n = DB.negocios[DB.sesion], id = f.dataset.id;
+    if (d.hasta < d.desde) return toast('La fecha final debe ser después de la inicial.');
+    const p = {titulo:d.titulo.trim(), desc:d.desc.trim(), desde:d.desde, hasta:d.hasta, destacada:!!d.destacada, img:d.img};
+    if (id) Object.assign(n.promos.find(x => x.id === id), p); else n.promos.unshift({id:'pr' + Date.now(), ...p});
+    guardar(); cerrarModal(); render(); toast('Promoción publicada');
+  },
+  horario: (f, d) => {
+    const n = DB.negocios[DB.sesion];
+    DIAS.forEach(dd => { n.horario[dd] = {a:d[dd + '_a'] || '09:00', c:d[dd + '_c'] === '23:59' ? '24:00' : (d[dd + '_c'] || '20:00'), cerrado:!d[dd + '_abre']}; });
+    guardar(); toast('Horario guardado'); render();
+  },
+  darPuntos: (f, d) => {
+    const n = DB.negocios[DB.sesion], cod = d.cod.trim().toUpperCase(), monto = +d.monto;
+    if (cod !== DB.cliente.codigo) return toast(`No encontramos el cliente ${cod}. En la demo usa ${DB.cliente.codigo}.`);
+    const p = Math.floor(monto / DB.config.pesosPorPunto); if (p < 1) return toast(`La compra mínima para dar puntos es de $${DB.config.pesosPorPunto}.`);
+    const c = DB.cliente; c.puntos += p; c.acumulados += p;
+    const hoy = new Date().toISOString().slice(0, 10);
+    c.historial.unshift({f:hoy, t:n.nombre, d:`Compra de $${monto.toLocaleString('es-MX')}`, p});
+    DB.stats[n.id].pts += p; DB.movs.push({n:n.id, f:fFecha(hoy), t:'Puntos dados', d:`${p} puntos a ${c.nombre} (${cod}) por $${monto.toLocaleString('es-MX')}`});
+    guardar(); toast(`Listo: ${p} puntos para ${c.nombre}`); render();
+  },
+  validarCupon: (f, d) => {
+    const n = DB.negocios[DB.sesion], cod = d.cod.trim().toUpperCase();
+    const k = DB.cliente.cupones.find(x => x.codigo === cod);
+    if (!k) return toast('Ese cupón no existe.');
+    if (k.n !== n.id) return toast(`Ese cupón es de ${k.negocio}.`);
+    if (k.usado) return toast('Ese cupón ya se usó.');
+    k.usado = true; DB.stats[n.id].cupones++;
+    DB.movs.push({n:n.id, f:fFecha(new Date().toISOString().slice(0, 10)), t:'Cupón canjeado', d:`${k.titulo} · ${k.codigo}`});
+    guardar(); modal(`<div style="text-align:center"><div style="font-size:48px">✅</div><h3 style="padding:0">Cupón válido</h3><p class="sub">Entrega: <b>${esc(k.titulo)}</b>. Ya quedó marcado como usado.</p><button class="btn ancho" style="margin-top:16px" data-a="cerrarModal">Listo</button></div>`); render();
+  },
+  recomp: (f, d) => {
+    const n = DB.negocios[DB.sesion], id = f.dataset.id, r = {titulo:d.titulo.trim(), puntos:Math.max(1, +d.puntos), desc:d.desc.trim()};
+    if (id) Object.assign(n.recompensas.find(x => x.id === id), r); else n.recompensas.push({id:'r' + Date.now(), ...r});
+    guardar(); cerrarModal(); render(); toast('Recompensa guardada');
+  },
+  local: (f, d) => { DB.rentas[f.dataset.id] = {estado:d.estado, renta:+d.renta || 0}; guardar(); cerrarModal(); render(); toast('Local actualizado'); },
+  alta: (f, d) => {
+    const id = f.dataset.id, cat = d.cat;
+    const n = {id, nombre:d.nombre.trim(), giro:d.giro.trim(), cat, color:'#5C6B57', emoji:CAT(cat).e, desc:'', logo:'', portada:'', fotos:[],
+      horario:Object.fromEntries(DIAS.map(x => [x, {a:'10:00', c:'20:00', cerrado:false}])), whatsapp:d.whatsapp.trim(), telefono:'', instagram:'', facebook:'', web:'',
+      productos:[], promos:[], recompensas:[], publicado:true, prox:true, codigo:'NEG-' + codigo()};
+    DB.negocios[id] = n; DB.stats[id] = {visitas:[0,0,0,0,0,0,0], wa:0, pts:0, cupones:0}; guardar();
+    modal(`<h3>Negocio creado</h3><p class="sub">Comparte este código con ${esc(n.nombre)} para que entre a su panel y cargue su información:</p><div class="cupon" style="justify-content:center;margin:14px 0"><div class="cod">${n.codigo}</div></div><p class="sub">Aparece en la app como «Próximamente» hasta que lo marques como abierto en Negocios.</p><button class="btn ancho" style="margin-top:14px" data-a="cerrarModal">Listo</button>`);
+    render();
+  },
+  aviso: (f, d) => {
+    const id = f.dataset.id, a = {tipo:d.tipo, fecha:d.fecha, titulo:d.titulo.trim(), texto:d.texto.trim(), para:d.para};
+    if (id) Object.assign(DB.avisos.find(x => x.id === id), a); else DB.avisos.push({id:'e' + Date.now(), ...a});
+    guardar(); cerrarModal(); render(); toast('Publicado');
+  },
+  config: (f, d) => {
+    const c = DB.config; c.programa = d.programa.trim(); c.pesosPorPunto = Math.max(1, +d.pesosPorPunto); c.bono = Math.max(0, +d.bono);
+    c.niveles = c.niveles.map(([n, p], i) => [n, i === 0 ? 0 : Math.max(1, +d['nivel' + i])]);
+    guardar(); toast('Reglas guardadas'); render();
+  },
+};
+document.addEventListener('submit', e => {
+  const f = e.target; if (!f.dataset.f || !F[f.dataset.f]) return;
+  e.preventDefault(); F[f.dataset.f](f, datos(f));
+});
+document.addEventListener('input', e => {
+  const el = e.target;
+  if (el.dataset.in === 'q') { ST.q = el.value; $('#listaTiendas').innerHTML = listaTiendas(); }
+});
+document.addEventListener('change', async e => {
+  const el = e.target;
+  if (el.dataset.ch === 'notif') { DB.cliente.notif[el.dataset.k] = el.checked; guardar(); toast('Preferencia guardada'); }
+  if (el.dataset.ch === 'prodActivo') { DB.negocios[DB.sesion].productos.find(p => p.id === el.dataset.id).activo = el.checked; guardar(); render(); }
+  if (el.dataset.ch === 'publicar') { DB.negocios[el.dataset.id].publicado = el.checked; guardar(); toast(el.checked ? 'Publicado en la app' : 'Oculto de la app'); }
+  if (el.dataset.ch === 'estadoNeg') { DB.negocios[el.dataset.id].prox = el.value === 'prox'; guardar(); toast('Estado actualizado'); }
+  if (el.dataset.file) {
+    const campo = el.dataset.file, files = [...el.files]; if (!files.length) return;
+    try {
+      if (campo === 'fotos') {
+        const n = DB.negocios[DB.sesion];
+        for (const fl of files.slice(0, 12)) n.fotos.push(await leerImagen(fl, 1100));
+        guardar(); render(); toast(files.length > 1 ? `${Math.min(files.length, 12)} fotos agregadas` : 'Foto agregada');
+      } else if (campo === 'logo' || campo === 'portada') {
+        DB.negocios[DB.sesion][campo] = await leerImagen(files[0], campo === 'logo' ? 400 : 1400); guardar(); render(); toast(campo === 'logo' ? 'Logo actualizado' : 'Portada actualizada');
+      } else {
+        const img = await leerImagen(files[0], 900), caja = $('#' + campo), form = caja.closest('form');
+        form[campo === 'prodFoto' ? 'foto' : 'img'].value = img;
+        caja.style.backgroundImage = `url(${img})`; caja.classList.add('con-img'); caja.querySelector('span').textContent = 'Cambiar imagen';
+      }
+    } catch (err) { toast('No pudimos leer esa imagen. Prueba con una foto JPG o PNG.'); }
+  }
+});
+
+render();
+</script>
+</body>
+</html>
